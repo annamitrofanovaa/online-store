@@ -8,6 +8,7 @@ const models = require('./models/models')
 
 const cors = require('cors')
 const router = require('./routes/index')
+const errorHandler = require('./middleware/ErrorHandlingMiddleware')
 
 const PORT = process.env.PORT || 5000
 
@@ -21,6 +22,9 @@ app.use(express.json())
 
 //зададим каркас приложения
 app.use('/api', router)
+
+//обработка ошибок, последний Middleware
+app.use(errorHandler)
 
 //функция для подключения к бд
 const start = async () => {
