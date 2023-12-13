@@ -10,7 +10,7 @@
 Bookworm
 <h4>Предметная область</h4> 
 Информация о книгах <br>
-<h4>Данные</h4> 
+<h2>Данные</h2> 
 
 <details> 
   
@@ -18,9 +18,11 @@ Bookworm
 
 |Название|Тип|Ограничение|
 |-:|:-:|:-|
-|id|int64|not null >0|
-|name|string|not null len>0|
-|authir_id|int64|>0not null|
+|id|int64|not null, >0|
+|name|string|not null, len>0|
+|authir_id|int64| >0, not null|
+|price|float| >=0, not null|
+|genre_id|int64| >0, not null|
 
 </details>
 
