@@ -127,4 +127,7 @@ Backend:
 <li>Node.js</li>
 
 ## СУБД
+
+Postgres
+
 # Тестирование
