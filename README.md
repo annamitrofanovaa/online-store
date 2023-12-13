@@ -11,8 +11,6 @@ Bookworm
 <h4>Предметная область</h4> 
 Информация о книгах <br>
 <h4>Данные</h4> 
-<details>
-
 
 
 <summary>Book</summary>
@@ -22,7 +20,7 @@ Bookworm
 |name|string|!=null len>0|
 |authir_id|int64|>0, != null|
 
-</details>
+
 
 
 ## Для каждого элемента данных - ограничения
