@@ -121,7 +121,8 @@ Frontend:
 <li>Vue.js - фреймворк JavaScript </li>
 <li>Quasar - фреймворк Vue </li> 
 <li>Axios - библиотека для ассинхронной логики </li>
-
+<br>
+<br>
 Backend:
 <li>Node.js</li>
 
