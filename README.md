@@ -118,9 +118,9 @@ Bookworm
 # Технологии разработки
 Frontend:
 <li>HTML, CSS, JavaScript</li>
-<li>Vue.js</li> - фреймворк JavaScript
-<li>Quasar</li> - фреймворк Vue
-<li>Axios</li> - библиотека для ассинхронной логики
+<li>Vue.js - фреймворк JavaScript </li>
+<li>Quasar - фреймворк Vue </li> 
+<li>Axios - библиотека для ассинхронной логики </li>
 
 ## Язык программирования
 ## СУБД
