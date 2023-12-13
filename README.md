@@ -12,15 +12,17 @@ Bookworm
 Информация о книгах <br>
 <h4>Данные</h4> 
 
+<details> 
+  
+<summary> <h4>Book</h4> </summary>
 
-<summary>Book</summary>
 |Название|Тип|Ограничение|
 |-:|:-:|:-|
-|id|int64|not null|
+|id|int64|not null >0|
 |name|string|not null len>0|
-|authir_id|int64|>0, not null|
+|authir_id|int64|>0not null|
 
-
+</details>
 
 
 ## Для каждого элемента данных - ограничения
