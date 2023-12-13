@@ -13,19 +13,17 @@ Bookworm
 <h4>Данные</h4> 
 <details>
 
-<summary>Book</summary>
-|Название|Тип| Ограничения |
-|:------:|:----:|:-----------:|
-|id|int64|>0, != null|
-|name|string|!= null len>0|
-| author_id | int64 | >0, != null |
-</details>
 
+
+<summary>Book</summary>
 |Название|Тип|Ограничение|
 |-:|:-:|:-|
-|id|Саша|118|
-|name|Юля|92|
-|authir_id|Даниил|36|
+|id|int64|>0, != null|
+|name|string|!=null len>0|
+|authir_id|int64|>0, != null|
+
+</details>
+
 
 ## Для каждого элемента данных - ограничения
 ## Общие ограничения целостности
