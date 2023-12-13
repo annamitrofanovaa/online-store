@@ -14,10 +14,10 @@ Bookworm
 <details>
 
 <summary>Book</summary>
-|Название|Тип   | Ограничения |
+|Название|Тип| Ограничения |
 |:------:|:----:|:-----------:|
-| id | int64 | >0, != null |
-| name | string | != null len>0 |
+|id|int64|>0, != null|
+|name|string|!= null len>0|
 | author_id | int64 | >0, != null |
 </details>
 
