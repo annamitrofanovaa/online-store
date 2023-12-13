@@ -16,7 +16,7 @@ Bookworm
 <summary>Book</summary>
 |Название|Тип|Ограничение|
 |-:|:-:|:-|
-|id|int64|>0, != null|
+|id|int64| >0, != null|
 |name|string|!=null len>0|
 |authir_id|int64|>0, != null|
 
