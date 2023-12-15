@@ -12,11 +12,11 @@ const Basket = sequelize.define('basket', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
 })
 
-const BasketDevice = sequelize.define('basket_device', {
+const BasketBook = sequelize.define('basket_book', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
 })
 
-const Device = sequelize.define('device', {
+const Book = sequelize.define('book', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: DataTypes.STRING, unique: true, allowNull: false},
     price: {type: DataTypes.INTEGER, allowNull: false},
@@ -24,28 +24,28 @@ const Device = sequelize.define('device', {
     img: {type: DataTypes.STRING, allowNull: false},
 })
 
-const Type = sequelize.define('type', {
+const Author = sequelize.define('author', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: DataTypes.STRING, unique: true, allowNull: false},
 })
 
-const Brand = sequelize.define('brand', {
+const Genre = sequelize.define('genre', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: DataTypes.STRING, unique: true, allowNull: false},
 })
 
-const Rating = sequelize.define('rating', {
+/*const Rating = sequelize.define('rating', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     rate: {type: DataTypes.INTEGER, allowNull: false},
-})
+})*/
 
-const DeviceInfo = sequelize.define('device_info', {
+const BookInfo = sequelize.define('book_info', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     title: {type: DataTypes.STRING, allowNull: false},
     description: {type: DataTypes.STRING, allowNull: false},
 })
 
-const TypeBrand = sequelize.define('type_brand', {
+const AuthorGenre = sequelize.define('author_genre', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
 })
 
@@ -53,38 +53,38 @@ const TypeBrand = sequelize.define('type_brand', {
 User.hasOne(Basket)
 Basket.belongsTo(User)
 
-User.hasMany(Rating)
-Rating.belongsTo(User)
+//User.hasMany(Rating)
+//Rating.belongsTo(User)
 
-Basket.hasMany(BasketDevice)
-BasketDevice.belongsTo(Basket)
+Basket.hasMany(BasketBook)
+BasketBook.belongsTo(Basket)
 
-Type.hasMany(Device)
-Device.belongsTo(Type)
+Type.hasMany(Book)
+Book.belongsTo(Type)
 
-Brand.hasMany(Device)
-Device.belongsTo(Brand)
+Genre.hasMany(Book)
+Book.belongsTo(Genre)
 
-Device.hasMany(Rating)
-Rating.belongsTo(Device)
+//Book.hasMany(Rating)
+//Rating.belongsTo(Book)
 
-Device.hasMany(BasketDevice)
-BasketDevice.belongsTo(Device)
+Book.hasMany(BasketBook)
+BasketBook.belongsTo(Book)
 
-Device.hasMany(DeviceInfo, {as: 'info'});
-DeviceInfo.belongsTo(Device)
+Book.hasMany(BookInfo, {as: 'info'});
+BookInfo.belongsTo(Book)
 
-Type.belongsToMany(Brand, {through: TypeBrand })
-Brand.belongsToMany(Type, {through: TypeBrand })
+Author.belongsToMany(Genre, {through: AuthorGenre })
+Genre.belongsToMany(Type, {through: AuthorGenre })
 
 module.exports = {
     User,
     Basket,
-    BasketDevice,
-    Device,
-    Type,
-    Brand,
-    Rating,
-    TypeBrand,
-    DeviceInfo
+    BasketBook,
+    Book,
+    Author,
+    Genre,
+   // Rating,
+    AuthorGenre,
+    BookInfo
 }
