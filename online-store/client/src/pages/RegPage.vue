@@ -31,10 +31,11 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { postreg } from '../axiosRequest'
 import { userStore } from '../usage'
 import { useRouter } from "vue-router";
+import { jwtDecode } from "jwt-decode"
 
 export default {
     setup() {
@@ -49,10 +50,13 @@ export default {
                 throw new Error('не все данные введены');
             }
 
-            postreg({email:email.value, password: password.value})
-            .then((myresponse) => {
+            postreg({ email: email.value, password: password.value })
+                .then((myresponse) => {
                     console.log(myresponse);
                     userStore.updateState('access_token', myresponse.token);
+                    console.log(jwtDecode(myresponse.token))
+                    const response = jwtDecode(myresponse.token);
+                    userStore.updateAll({ id: response.id, email: response.email, role: response.role });
                     router.push({ name: 'main' });
                 })
                 .catch((myerror) => {

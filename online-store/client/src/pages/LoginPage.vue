@@ -32,9 +32,10 @@
 
 <script>
 import { ref } from 'vue';
-// import { postlog } from '../axiosRequest'
-// import { userStore } from '../usage'
+import { postlog } from '../axiosRequest'
+import { userStore } from '../usage'
 import { useRouter } from "vue-router";
+import { jwtDecode } from 'jwt-decode';
 
 export default {
     setup() {
@@ -49,16 +50,19 @@ export default {
                 throw new Error('не все данные введены');
             }
 
-            // postlog({ username: email.value, password: password.value })
-            //     .then((myresponse) => {
-            //         const { access_token, token_type } = myresponse;
-            //         userStore.updateAll({ access_token, token_type, email: email.value });
-            //         router.push('/map');
-            //     })
-            //     .catch((myerror) => {
-            //         console.error(myerror);
-            //         userStore.setError(myerror);
-            //     })
+            postlog({ email: email.value, password: password.value })
+                .then((myresponse) => {
+                    console.log(myresponse);
+                    userStore.updateState('access_token', myresponse.token);
+                    console.log(jwtDecode(myresponse.token))
+                    const response = jwtDecode(myresponse.token);
+                    userStore.updateAll({ id: response.id, email: response.email, role: response.role });
+                    router.push({ name: 'main' });
+                })
+                .catch((myerror) => {
+                    console.error(myerror);
+                    userStore.setError(myerror);
+                })
         }
         return {
             email, password,
