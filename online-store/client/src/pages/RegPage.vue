@@ -32,8 +32,8 @@
 
 <script>
 import { ref } from 'vue';
-// import { postlog } from '../axiosRequest'
-// import { userStore } from '../usage'
+import { postreg } from '../axiosRequest'
+import { userStore } from '../usage'
 import { useRouter } from "vue-router";
 
 export default {
@@ -49,11 +49,22 @@ export default {
                 throw new Error('не все данные введены');
             }
 
+            postreg({email:email.value, password: password.value})
+            .then((myresponse) => {
+                    console.log(myresponse);
+                    userStore.updateState('access_token', myresponse.token);
+                    router.push({ name: 'main' });
+                })
+                .catch((myerror) => {
+                    console.error(myerror);
+                    userStore.setError(myerror);
+                })
+
             // postlog({ username: email.value, password: password.value })
             //     .then((myresponse) => {
             //         const { access_token, token_type } = myresponse;
             //         userStore.updateAll({ access_token, token_type, email: email.value });
-            //         router.push('/map');
+            //         router.push('/main');
             //     })
             //     .catch((myerror) => {
             //         console.error(myerror);
