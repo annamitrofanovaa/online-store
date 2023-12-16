@@ -59,8 +59,8 @@ Basket.belongsTo(User)
 Basket.hasMany(BasketBook)
 BasketBook.belongsTo(Basket)
 
-Type.hasMany(Book)
-Book.belongsTo(Type)
+Author.hasMany(Book)
+Book.belongsTo(Author)
 
 Genre.hasMany(Book)
 Book.belongsTo(Genre)
@@ -75,7 +75,7 @@ Book.hasMany(BookInfo, {as: 'info'});
 BookInfo.belongsTo(Book)
 
 Author.belongsToMany(Genre, {through: AuthorGenre })
-Genre.belongsToMany(Type, {through: AuthorGenre })
+Genre.belongsToMany(Author, {through: AuthorGenre })
 
 module.exports = {
     User,
