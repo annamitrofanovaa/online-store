@@ -35,6 +35,25 @@ class BookController {
         }
     }
 
+    async deleteBook(req, res, next) {
+        try {
+            const { id } = req.params;
+
+            // Проверка существования книги
+            const book = await Book.findByPk(id);
+            if (!book) {
+                throw new ApiError.notFound('Книга не найдена.');
+            }
+
+            // Удаление книги
+            await book.destroy();
+
+            return res.json({ message: 'Книга успешно удалена.' });
+        } catch (e) {
+            next(ApiError.badRequest(e.message));
+        }
+    }
+
     async getAll(req, res) {
         let { genreId, authorId, limit, page } = req.query
         page = page || 1
@@ -56,6 +75,33 @@ class BookController {
 
         return res.json(books)
 
+    }
+
+    async editBook(req, res, next) {
+        try {
+            const { id } = req.params;
+
+            // Проверка существования книги
+            const book = await Book.findByPk(id);
+            if (!book) {
+                throw new ApiError.notFound('Книга не найдена.');
+            }
+
+            // Получение новых данных для книги из тела запроса
+            const { name, price, genreId, authorId } = req.body;
+
+            // Обновление данных книги
+            await book.update({
+                name: name || book.name,
+                price: price || book.price,
+                genreId: genreId || book.genreId,
+                authorId: authorId || book.authorId,
+            });
+
+            return res.json(book);
+        } catch (e) {
+            next(ApiError.badRequest(e.message));
+        }
     }
 
     async getOne(req, res) {
