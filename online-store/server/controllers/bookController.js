@@ -4,12 +4,19 @@ const { Book, BookInfo } = require('../models/models')
 const ApiError = require('../error/ApiError');
 
 class BookController {
-    async create(req, res) {
+    async create(req, res, next) {
         try {
             const { name, price, genreId, authorId, info } = req.body
             const { img } = req.files
             let fileName = uuid.v4() + ".jpg"
+            if (!img) {
+                throw new ApiError.badRequest('Изображение не было предоставлено.');
+            }
+
+            img.mv(path.resolve(__dirname, '..', 'static', fileName));
+
             img.mv(path.resolve(__dirname, '..', 'static', fileName))
+            const book = await Book.create({ name, price, genreId, authorId, img: fileName });
 
             if (info) {
                 info = JSON.parse(info) //парсим из строки
@@ -21,7 +28,6 @@ class BookController {
                     })
                 )
             }
-            const book = await Book.create({ name, price, genreId, authorId, img: fileName });
 
             return res.json(book)
         } catch (e) {

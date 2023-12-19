@@ -3,7 +3,9 @@ const router = new Router()
 const bookController = require('../controllers/bookController')
 const checkRole = require('../middleware/checkRoleMiddleware')
 
-router.post('/', checkRole('ADMIN'), bookController.create)
+//router.post('/', checkRole('ADMIN'), bookController.create)
+
+router.post('/', bookController.create)
 router.get('/', bookController.getAll)
 router.get('/:id', bookController.getOne)
 
