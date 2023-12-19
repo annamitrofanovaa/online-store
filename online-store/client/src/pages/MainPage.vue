@@ -7,6 +7,11 @@
 
         <q-page-container>
             <q-page>
+                <q-card>
+                    <q-input outlined label="Id пользователя" class="q-my-sm" v-model="workData.id"></q-input>
+                    <q-input outlined label="Новая роль" class="q-my-sm" v-model="workData.role"></q-input>
+                    <q-btn @click="AddAdmin">Добавить админа</q-btn>
+                </q-card>
                 <q-toggle v-model="isGrid" color="green" label="Показ"></q-toggle>
                 <q-table :rows="rows" :columns="columns" row-key="id" :grid="isGrid">
 
@@ -18,12 +23,14 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { userStore } from '../usage'
+import { postToServer } from '../axiosRequest';
 export default {
     setup() {
         const isGrid = ref(false);
         const role = userStore.getState().role;
+        const workData = reactive({ id: '', role: '' })
         const columns = [
             {
                 name: 'id',
@@ -72,8 +79,22 @@ export default {
 
         ]
 
+        function AddAdmin() {
+            if (userStore.getState().access_token) {
+                postToServer({ url: 'http://localhost:5000/api/admin/assignRole', data: { userId: workData.id, newRole: workData.role }, request: 'post' })
+                    .then((response) => {
+                        console.log(response);
 
-        return { role, columns, rows, isGrid }
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        userStore.setError(error);
+                    })
+            }
+        }
+
+
+        return { role, columns, rows, isGrid, AddAdmin, workData }
     },
 }
 </script>
