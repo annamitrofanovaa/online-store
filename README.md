@@ -125,9 +125,8 @@ Frontend:
 <br>
 Backend:
 <li>Node.js</li>
-
-## СУБД
-
-Postgres
+<li>Express</li>
+<li>PostgreSQL - система управления базами данных</li>
+<li>Sequelize - ORM для реляционных баз данных на node.js</li>
 
 # Тестирование
