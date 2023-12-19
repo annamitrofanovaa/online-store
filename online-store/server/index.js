@@ -9,16 +9,26 @@ const router = require('./routes/index')
 const errorHandler = require('./middleware/ErrorHandlingMiddleware')
 const path = require('path')
 
+const session = require('express-session'); //
+const app = express()
+app.use(session({/////////
+    secret: 'your-secret-key', // секретный ключ для подписи куки
+    resave: false,
+    saveUninitialized: false
+})); ////////
+
 const PORT = process.env.PORT || 5000
 
-const app = express()
+
+
+
 app.use(cors())
 app.use(express.json())
 app.use(express.static(path.resolve(__dirname, 'static'))) //изображения там
 app.use(fileUpload({}))
 //запросы из браузера
 //app.get('/', (reg, res) => {
-   // res.status(200).json({message:'WORKING!!!'})
+// res.status(200).json({message:'WORKING!!!'})
 //})
 
 //зададим каркас приложения
