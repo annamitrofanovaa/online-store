@@ -1,22 +1,34 @@
 const uuid = require('uuid')
 const path = require('path');
+const fs = require('fs');
 const { Book, BookInfo } = require('../models/models')
 const ApiError = require('../error/ApiError');
 
 class BookController {
     async create(req, res, next) {
         try {
-            const { name, price, genreId, authorId, info } = req.body
-            const { img } = req.files
-            let fileName = uuid.v4() + ".jpg"
-            if (!img) {
-                throw new ApiError.badRequest('Изображение не было предоставлено.');
+            const { name, price, genreId, authorId, imgBase64, info } = req.body
+            //const { img } = req.files
+            //let fileName = uuid.v4() + ".jpg"
+            const fileName = uuid.v4() + '.jpg';
+            const imgPath = path.resolve(__dirname, '..', 'static', fileName);
+            const imgData = imgBase64.replace(/^data:image\/\w+;base64,/, '');
+            // Создать директорию, если её нет
+            const dirPath = path.dirname(imgPath);
+            if (!fs.existsSync(dirPath)) {
+                fs.mkdirSync(dirPath, { recursive: true });
             }
 
-            img.mv(path.resolve(__dirname, '..', 'static', fileName));
-
-            img.mv(path.resolve(__dirname, '..', 'static', fileName))
+            fs.writeFileSync(imgPath, imgData, 'base64');
+            //if (!img) {
+            //  throw new ApiError.badRequest('Изображение не было предоставлено.');
+            // }
             const book = await Book.create({ name, price, genreId, authorId, img: fileName });
+
+            // img.mv(path.resolve(__dirname, '..', 'static', fileName));
+
+            //img.mv(path.resolve(__dirname, '..', 'static', fileName))
+            //const book = await Book.create({ name, price, genreId, authorId, img: fileName });
 
             if (info) {
                 info = JSON.parse(info) //парсим из строки
