@@ -1,12 +1,9 @@
-
 const routes = [
   {
-    path: '/',
-    component: () => import('layouts/EmptyLayout.vue'),
+    path: "/",
+    component: () => import("layouts/EmptyLayout.vue"),
     children: [
-      { path: '', 
-        name:"home",
-        component: () => import('pages/HomePage.vue') },
+      { path: "", name: "home", component: () => import("pages/HomePage.vue") },
       {
         path: "login",
         name: "login",
@@ -22,16 +19,20 @@ const routes = [
         name: "main",
         component: () => import("src/pages/MainPage.vue"),
       },
-
-    ]
+      {
+        path: "book",
+        name: "book",
+        component: () => import("src/pages/BookInfo.vue"),
+      },
+    ],
   },
 
   // Always leave this as last one,
   // but you can also remove it
   {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue')
-  }
-]
+    path: "/:catchAll(.*)*",
+    component: () => import("pages/ErrorNotFound.vue"),
+  },
+];
 
-export default routes
+export default routes;
