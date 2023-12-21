@@ -21,4 +21,4 @@ RUN npm install -g nodemon
 EXPOSE 5000
 
 # Команда для запуска сервера
-CMD ["node", "index.js"]
+CMD ["npm", "run", "dev"]
