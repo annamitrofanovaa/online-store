@@ -1,0 +1,59 @@
+# version: '3'
+
+# services:
+#   client:
+#     build:
+#       context: ./client    # Путь к папке с Dockerfile для клиента
+#       dockerfile: Dockerfile  # Имя Dockerfile для клиента
+#     ports:
+#       - "8080:8080"  # Проброс портов (хост:контейнер)
+#     volumes:
+#       - ./client:/usr/src/app 
+  
+#   server:
+#     build:
+#       context: ./server    # Путь к папке с Dockerfile для сервера
+#       dockerfile: Dockerfile  # Имя Dockerfile для сервера
+#     ports:
+#       - "5000:5000"  # Проброс портов (хост:контейнер)
+#     volumes:
+#       - ./server:/usr/src/app 
+
+
+version: '3'
+
+services:
+  # Серверное приложение
+  server:
+    build:
+      context: ./server
+    ports:
+      - "5000:5000"
+    environment:
+      POSTGRES_HOST: localhost
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 90210
+      POSTGRES_DB: online_store
+    depends_on:
+      - postgres
+
+  # Клиентское приложение
+  client:
+    build:
+      context: ./client
+    ports:
+      - "8080:8080"  # Порт Vue приложения
+    depends_on:
+      - server
+
+  # PostgreSQL
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 90210
+      POSTGRES_DB: online_store
+    env_file:
+      - ./server/.env
+    ports:
+      - "4321:4321"
