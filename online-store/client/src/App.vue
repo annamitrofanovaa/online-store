@@ -1,22 +1,22 @@
 <template>
   <div>
-  <q-dialog v-model="errorShow">
-    <q-card style="width: 300px">
-      <q-card-section>
-        <div class="text-h6 text-bold">Ошибка</div>
-      </q-card-section>
+    <q-dialog v-model="errorShow">
+      <q-card style="width: 300px">
+        <q-card-section>
+          <div class="text-h6 text-bold">Ошибка</div>
+        </q-card-section>
 
-      <q-card-section class="q-pt-none" style="white-space: pre-line;">{{ error }}</q-card-section>
+        <q-card-section class="q-pt-none" style="white-space: pre-line;">{{ error }}</q-card-section>
 
-      <q-card-actions align="right">
-        <q-btn flat label="OK" color="primary" @click="closeError" />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
-  <div v-if="isInit">
-    <router-view />
-  </div>
-  <div v-else>not Initialized</div>
+        <q-card-actions align="right">
+          <q-btn flat label="OK" color="primary" @click="closeError" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <div v-if="isInit">
+      <router-view />
+    </div>
+    <div v-else>not Initialized</div>
   </div>
 </template>
 
@@ -52,6 +52,9 @@ export default {
         }
       },
     );
+
+
+
     watch(
       () => userStore.getIsInitialized(),
       (val) => {
@@ -63,6 +66,6 @@ export default {
       userStore.init();
     })
     return { errorShow, error, closeError, isInit }
-    }
+  }
 }
 </script>

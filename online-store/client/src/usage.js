@@ -9,16 +9,17 @@ class UserStore extends PersistentStore {
       role: null,
       created_by: null,
       access_token: null,
-      token_type: null,
       error: null,
       bookInfo: {
         name: null,
-        description: null,
         price: null,
+        description: null,
         author: null,
         genre: null,
         image: null,
       },
+      genreInfo: [],
+      authorInfo: [],
     };
   }
 
@@ -30,6 +31,11 @@ class UserStore extends PersistentStore {
   }
   updateState(key, value) {
     this.state[key] = value;
+  }
+  updateInnerState(key, value) {
+    for (const key1 in this.state[key]) {
+      this.state[key][key1] = value[key1];
+    }
   }
   clearAll() {
     for (const key in this.state) {
