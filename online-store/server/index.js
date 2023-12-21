@@ -1,52 +1,65 @@
-require('dotenv').config()
+require("dotenv").config();
 
-const express = require('express')
-const sequelize = require('./db')
-const models = require('./models/models')
-const cors = require('cors')
-const fileUpload = require('express-fileupload')
-const router = require('./routes/index')
-const errorHandler = require('./middleware/ErrorHandlingMiddleware')
-const path = require('path')
+const express = require("express");
+const sequelize = require("./db");
+const cors = require("cors");
+const fileUpload = require("express-fileupload");
+const errorHandler = require("./middleware/ErrorHandlingMiddleware");
+const path = require("path");
 
-const session = require('express-session'); //
-const app = express()
-app.use(session({/////////
-    secret: 'your-secret-key', // секретный ключ для подписи куки
+const session = require("express-session");
+const app = express();
+app.use(
+  session({
+    secret: "your-secret-key",
     resave: false,
-    saveUninitialized: false
-})); ////////
+    saveUninitialized: false,
+  })
+);
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
 
+const corsOptions = {
+  origin: "*", // Укажите адрес вашего фронтенд-приложения
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: "Content-Type,Authorization",
+};
 
+// Обработка CORS для определенного маршрута
+app.use("/api/*", cors(corsOptions));
 
+app.use(express.json());
+app.use(express.static(path.resolve(__dirname, "static")));
+app.use(fileUpload());
 
-app.use(cors())
-app.use(express.json())
-app.use(express.static(path.resolve(__dirname, 'static'))) //изображения там
-app.use(fileUpload({}))
-//запросы из браузера
-//app.get('/', (reg, res) => {
-// res.status(200).json({message:'WORKING!!!'})
-//})
+// Обработка маршрутов
+const userRouter = require("./routes/userRouter");
+const bookRouter = require("./routes/bookRouter");
+const authorRouter = require("./routes/authorRouter");
+const genreRouter = require("./routes/genreRouter");
+const adminRouter = require("./routes/adminRouter");
 
-//зададим каркас приложения
-app.use('/api', router)
+// Использование маршрутов
+app.use("/api/user", userRouter);
+app.use("/api/book", bookRouter);
+app.use("/api/author", authorRouter);
+app.use("/api/genre", genreRouter);
+app.use("/api/admin", adminRouter);
 
-//обработка ошибок, последний Middleware
-app.use(errorHandler)
+// Обработка ошибок, последний Middleware
+app.use(errorHandler);
 
-//функция для подключения к бд
+// Функция для подключения к БД
 const start = async () => {
-    try {
-        await sequelize.authenticate() //с помощью нее подключаемс к бд
-        await sequelize.sync()
-        app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
-    } catch (e) {
-        console.log(e)
-    }
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync();
+    app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+  } catch (e) {
+    console.log(e);
+  }
+};
 
-}
-
-start()
+start();
