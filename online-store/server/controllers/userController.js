@@ -12,6 +12,7 @@ const generateJwt = (id, email, role) => {
 class UserController {
   async registration(req, res, next) {
     const { email, password, role } = req.body;
+
     if (!email || !password) {
       return next(ApiError.badRequest("Некорректный email или password"));
     }
@@ -31,6 +32,7 @@ class UserController {
 
   async login(req, res, next) {
     const { email, password } = req.body;
+    console.log("SERVER");
     const user = await User.findOne({ where: { email } });
     if (!user) {
       return next(ApiError.internal("Пользователь не найден"));
@@ -44,9 +46,9 @@ class UserController {
   }
 
   async check(req, res, next) {
-    res.json({ message: "all work" });
+    res.json({ message: "all work asasasssas" });
     const token = generateJwt(req.user.id, req.user.email, req.user.role);
-    return res.json({ token });
+    // return res.json({ token });
 
     /*const { id } = req.query
         if (!id) {

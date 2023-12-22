@@ -6,6 +6,7 @@ const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const errorHandler = require("./middleware/ErrorHandlingMiddleware");
 const path = require("path");
+const router = require("./routes/index");
 
 const session = require("express-session");
 const app = express();
@@ -17,40 +18,36 @@ app.use(
   })
 );
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 const corsOptions = {
-  origin: "*", // Укажите адрес вашего фронтенд-приложения
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  origin: "*",
+  methods: "GET,PUT,POST,DELETE,OPTIONS",
   preflightContinue: false,
   optionsSuccessStatus: 204,
-  allowedHeaders: "Content-Type,Authorization",
+  credentials: true,
+  allowedHeaders: "*",
+  exposedHeaders: "*",
 };
 
-// Обработка CORS для определенного маршрута
-app.use("/api/*", cors(corsOptions));
+// app.options("*", cors(corsOptions));
+app.use(cors());
 
-app.use(express.json());
-app.use(express.static(path.resolve(__dirname, "static")));
-app.use(fileUpload());
+// app.use(
+//   cors({
+//     origin: "*", // Укажите адрес вашего фронтенд-приложения
+//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+//     credentials: true, // Установите в true, если используете куки, авторизацию через заголовок запроса и т.п.
+//   })
+// );
+// app.use(express.json());
+// app.use(express.static(path.resolve(__dirname, "static")));
+// app.use(fileUpload());
 
-// Обработка маршрутов
-const userRouter = require("./routes/userRouter");
-const bookRouter = require("./routes/bookRouter");
-const authorRouter = require("./routes/authorRouter");
-const genreRouter = require("./routes/genreRouter");
-const adminRouter = require("./routes/adminRouter");
-
-// Использование маршрутов
-app.use("/api/user", userRouter);
-app.use("/api/book", bookRouter);
-app.use("/api/author", authorRouter);
-app.use("/api/genre", genreRouter);
-app.use("/api/admin", adminRouter);
+app.use("/api", router);
 
 // Обработка ошибок, последний Middleware
 app.use(errorHandler);
-
 
 // Подключение Swagger UI
 const swaggerJsdoc = require("swagger-jsdoc");
