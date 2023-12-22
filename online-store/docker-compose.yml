@@ -32,7 +32,7 @@ services:
     environment:
       POSTGRES_HOST: localhost
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 90210
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: online_store
     depends_on:
       - postgres
@@ -51,9 +51,9 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 90210
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: online_store
     env_file:
       - ./server/.env
     ports:
-      - "4321:4321"
+      - "5432:5432"
