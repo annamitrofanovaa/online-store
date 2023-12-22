@@ -1,18 +1,16 @@
 // routes/userRouter.js
 
-const Router = require('express');
+const Router = require("express");
 const router = new Router();
-const userController = require('../controllers/userController');
-const authMiddleware = require('../middleware/authMiddleware');
+const userController = require("../controllers/userController");
+const authMiddleware = require("../middleware/authMiddleware");
 
-router.options('*', (req, res) => {
-    res.header('Access-Control-Allow-Origin', '*'); // Укажите нужный домен или '*' для доступа с любых доменов
-    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-    res.status(204).send();
-  });
-
-
+// router.options('*', (req, res) => {
+//     res.header('Access-Control-Allow-Origin', '*'); // Укажите нужный домен или '*' для доступа с любых доменов
+//     res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+//     res.status(204).send();
+//   });
 
 /**
  * @swagger
@@ -47,7 +45,7 @@ router.options('*', (req, res) => {
  *       '400':
  *         description: Bad request
  */
-router.post('/registration', userController.registration);
+router.post("/registration", userController.registration);
 
 /**
  * @swagger
@@ -75,7 +73,7 @@ router.post('/registration', userController.registration);
  *       '401':
  *         description: Invalid credentials
  */
-router.post('/login', userController.login);
+router.post("/login", userController.login);
 
 /**
  * @swagger
@@ -91,6 +89,6 @@ router.post('/login', userController.login);
  *       '401':
  *         description: Unauthorized
  */
-router.get('/auth', authMiddleware, userController.check);
+router.get("/auth", authMiddleware, userController.check);
 
 module.exports = router;
