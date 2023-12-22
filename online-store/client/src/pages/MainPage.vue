@@ -20,9 +20,10 @@
 
                     <q-input filled label="Описание книги" class="q-mx-md q-my-sm col" v-model="bookData.description"
                         clearable></q-input>
-                    <q-input filled label="Цена" class="q-mx-md q-my-sm col" v-model="bookData.price" clearable></q-input>
-                    <q-file v-model="file" clearable label="Изображение" filled accept="image/*" max-files="1"
-                        class="q-mx-md q-my-sm col" />
+                    <q-input filled label="Цена" class="q-mx-md q-my-sm col" type="number" v-model.number="bookData.price"
+                        clearable></q-input>
+                    <!-- <q-file v-model="file" clearable label="Изображение" filled accept="image/*" max-files="1"
+                        class="q-mx-md q-my-sm col" /> -->
                 </q-card-section>
 
                 <q-card-actions align="right" class="q-ma-md">
@@ -108,7 +109,7 @@ export default {
         const optionsAuthor = ref([]);
         const optionsGenre = ref([]);
         const workData = reactive({ id: '', role: '', author: '', genre: '' })
-        const bookData = reactive({ name: '', description: '', price: '' });
+        const bookData = reactive({ name: '', description: '', price: null });
 
 
 
@@ -264,50 +265,55 @@ export default {
         function addBook() {
             // console.log('ID', genres.value)
 
-            if (!file.value) {
-                throw new Error('Файл не добавлен');
+            // if (!file.value) {
+            //     throw new Error('Файл не добавлен');
+            // }
+
+
+            if (!bookData.name.trim() || !bookData.description.trim() || !bookData.price || !genres.value || !authors.value) {
+                throw new Error('Не все данные введены');
             }
 
-            for (const key in bookData) {
-                if (!bookData[key].trim() || !genres.value || !authors.value) {
-                    throw new Error('Не все данные введены');
-                }
-            }
 
 
 
-            const reader = new FileReader();
-            reader.readAsDataURL(file.value);
-            reader.onload = () => {
-                console.log(reader.result);
-                image.value = reader.result;
-            }
+            // const reader = new FileReader();
+            // reader.readAsDataURL(file.value);
+            // reader.onload = () => {
+            //     console.log(reader.result);
+            //     image.value = reader.result;
+            // }
             // console.log('reader : ', reader);
             // console.log('image.value : ', image.value);
 
             // console.log(file.value);
-            console.log('name', file.value.name);
-            rows.value.push({ ...bookData, image });
-            console.log('rows.value ', rows.value)
+            // console.log('name', file.value.name);
+            // rows.value.push({ ...bookData });
+            // console.log('rows.value ', rows.value)
 
-            const formData = new FormData();
-            formData.append('name', bookData.name);
-            formData.append('info', bookData.description);
-            formData.append('price', bookData.price);
-            formData.append('authorId', authors.value);
-            formData.append('genreId', genres.value);
-            formData.append('imgBase64', file.value, file.value.name);
+            // const formData = new FormData();
+            // formData.append('name', bookData.name);
+            // formData.append('info', bookData.description);
+            // formData.append('price', bookData.price);
+            // formData.append('authorId', authors.value);
+            // formData.append('genreId', genres.value);
+            // formData.append('imgBase64', file.value, file.value.name);
 
 
 
-            postToServer({ url: 'http://localhost:5000/api/book', data: formData, request: 'post' })
+            postToServer({
+                url: 'http://localhost:5000/api/book', data: {
+                    name: bookData.name, info: { title: bookData.name, description: bookData.description, }, price: bookData.price,
+                    authorId: authors.value, genreId: genres.value
+                }, request: 'post'
+            })
                 .then((response) => {
                     console.log(response);
                     dialogOpen.value = false;
                     for (const key in bookData) {
                         bookData[key] = '';
                     }
-                    file.value = null;
+                    // file.value = null;
                 })
                 .catch((error) => {
                     console.error(error);
@@ -327,8 +333,8 @@ export default {
         }
         return {
             role, columns, rows, isGrid, addAdmin, workData,
-            bookData, logout, cancel, addBook, dialogOpen, selectRow, image,
-            rowSelected, addToStore, deleteBook, editBook, file, addAuthor, addGenre,
+            bookData, logout, cancel, addBook, dialogOpen, selectRow,
+            rowSelected, addToStore, deleteBook, editBook, addAuthor, addGenre,
             optionsAuthor, authors, genres, optionsGenre
         }
     },
