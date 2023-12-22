@@ -1,11 +1,10 @@
 // routes/userRouter.js
 
-<<<<<<< HEAD
 const Router = require('express');
 const router = new Router();
 const userController = require('../controllers/userController');
 const authMiddleware = require('../middleware/authMiddleware');
-=======
+
 router.options('*', (req, res) => {
     res.header('Access-Control-Allow-Origin', '*'); // Укажите нужный домен или '*' для доступа с любых доменов
     res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
@@ -13,10 +12,7 @@ router.options('*', (req, res) => {
     res.status(204).send();
   });
 
-router.post('/registration', userController.registration)
-router.post('/login', userController.login)
-router.get('/auth', authMiddleware, userController.check)
->>>>>>> 03913761b67b94f05ab8298452f479dae29f166d
+
 
 /**
  * @swagger

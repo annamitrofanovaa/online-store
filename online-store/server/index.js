@@ -1,27 +1,5 @@
 require("dotenv").config();
 
-<<<<<<< HEAD
-const express = require('express')
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
-const sequelize = require('./db')
-const models = require('./models/models')
-const cors = require('cors')
-const fileUpload = require('express-fileupload')
-const router = require('./routes/index')
-const errorHandler = require('./middleware/ErrorHandlingMiddleware')
-const path = require('path')
-
-const session = require('express-session'); 
-
-const app = express()
-
-app.use(session({
-    secret: 'your-secret-key',
-    resave: false,
-    saveUninitialized: false
-}));
-=======
 const express = require("express");
 const sequelize = require("./db");
 const cors = require("cors");
@@ -38,44 +16,9 @@ app.use(
     saveUninitialized: false,
   })
 );
->>>>>>> 03913761b67b94f05ab8298452f479dae29f166d
 
 const PORT = process.env.PORT || 5000;
 
-<<<<<<< HEAD
-app.use(cors())
-app.use(express.json())
-app.use(express.static(path.resolve(__dirname, 'static')))
-app.use(fileUpload())
-
-// Настройка Swagger
-const options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Your API',
-      version: '1.0.0',
-    },
-  },
-  apis: ['./routes/*.js'],
-};
-
-const specs = swaggerJsdoc(options);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
-
-app.use('/api', router);
-app.use(errorHandler);
-
-const start = async () => {
-    try {
-        await sequelize.authenticate()
-        await sequelize.sync()
-        app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
-    } catch (e) {
-        console.log(e)
-    }
-}
-=======
 const corsOptions = {
   origin: "*", // Укажите адрес вашего фронтенд-приложения
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -108,6 +51,25 @@ app.use("/api/admin", adminRouter);
 // Обработка ошибок, последний Middleware
 app.use(errorHandler);
 
+// Подключение Swagger UI
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Your API",
+      version: "1.0.0",
+      description: "Your API description",
+    },
+  },
+  apis: ["./routes/*.js"], // Путь к вашим маршрутам
+};
+
+const specs = swaggerJsdoc(options);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+
 // Функция для подключения к БД
 const start = async () => {
   try {
@@ -118,6 +80,5 @@ const start = async () => {
     console.log(e);
   }
 };
->>>>>>> 03913761b67b94f05ab8298452f479dae29f166d
 
 start();
