@@ -51,6 +51,26 @@ app.use("/api/admin", adminRouter);
 // Обработка ошибок, последний Middleware
 app.use(errorHandler);
 
+
+// Подключение Swagger UI
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Your API",
+      version: "1.0.0",
+      description: "Your API description",
+    },
+  },
+  apis: ["./routes/*.js"], // Путь к вашим маршрутам
+};
+
+const specs = swaggerJsdoc(options);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+
 // Функция для подключения к БД
 const start = async () => {
   try {

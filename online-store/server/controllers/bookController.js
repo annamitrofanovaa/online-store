@@ -3,52 +3,37 @@ const path = require("path");
 const fs = require("fs");
 const { Book, BookInfo } = require("../models/models");
 const ApiError = require("../error/ApiError");
+const uuid = require("uuid");
+const path = require("path");
+const { Book, BookInfo } = require("../models/models");
+const ApiError = require("../error/ApiError");
 
 class BookController {
   async create(req, res, next) {
     try {
-      const { name, price, genreId, authorId, imgBase64, info } = req.body;
-      const { img } = req.files;
-      //let fileName = uuid.v4() + ".jpg"
-      const fileName = uuid.v4() + ".jpg";
-      // const imgPath = path.resolve(__dirname, '..', 'static', fileName);
-      // const imgData = imgBase64.replace(/^data:image\/\w+;base64,/, '');
-      // Создать директорию, если её нет
-      // const dirPath = path.dirname(imgPath);
-      // if (!fs.existsSync(dirPath)) {
-      //     fs.mkdirSync(dirPath, { recursive: true });
-      // }
+      const { name, price, genreId, authorId, info } = req.body;
 
-      // fs.writeFileSync(imgPath, imgData, 'base64');
-      if (!img) {
-        throw new ApiError.badRequest("Изображение не было предоставлено.");
-      }
-      // const book = await Book.create({ name, price, genreId, authorId, img: fileName });
-
-      img.mv(path.resolve(__dirname, "..", "static", fileName));
-
-      img.mv(path.resolve(__dirname, "..", "static", fileName));
       const book = await Book.create({
         name,
         price,
         genreId,
         authorId,
-        img: fileName,
+        info,
       });
 
       if (info) {
-        info = JSON.parse(info); //парсим из строки
-        info.forEach((i) =>
-          BookInfo.create({
-            title: i.title,
-            description: i.description,
-            bookId: book.id,
-          })
-        );
+        // info = JSON.parse(info); // Парсим из строки
+        const bookInfo = await BookInfo.create({
+          title: info.title,
+          description: info.description,
+          bookId: book.id,
+        });
+        console.log("BookInfo created:", bookInfo);
       }
 
       return res.json(book);
     } catch (e) {
+      console.error(e);
       next(ApiError.badRequest(e.message));
     }
   }

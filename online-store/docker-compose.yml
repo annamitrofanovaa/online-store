@@ -22,7 +22,7 @@
 version: "3"
 
 services:
-  # Серверное приложение
+  # Сервер
   server:
     build:
       context: ./server
@@ -31,17 +31,18 @@ services:
     environment:
       POSTGRES_HOST: localhost
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: 90210
       POSTGRES_DB: online_store
     depends_on:
       - postgres
 
-  # Клиентское приложение
+  # Клиент
   client:
     build:
       context: ./client
     ports:
-      - "8080:8080"
+      - "8080:8080" 
+
     depends_on:
       - server
 
@@ -50,9 +51,9 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: 90210
       POSTGRES_DB: online_store
     env_file:
       - ./server/.env
     ports:
-      - "5432:5432"
+      - "4321:4321"
