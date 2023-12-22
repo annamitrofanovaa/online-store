@@ -51,6 +51,7 @@ app.use("/api/admin", adminRouter);
 // Обработка ошибок, последний Middleware
 app.use(errorHandler);
 
+
 // Подключение Swagger UI
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
