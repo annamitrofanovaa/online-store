@@ -1,22 +1,14 @@
-const { Router } = require('express');
-const favoriteController = require('../controllers/favoriteController');
-const checkAuthentication = require('../middleware/checkAuthenticationMiddleware');
-
-const router = Router();
-
+const Router = require("express");
+const router = new Router();
+const favoriteController = require("../controllers/favoriteController");
+//const checkRole = require("../middleware/checkRoleMiddleware");
 /**
  * @swagger
- * tags:
- *   name: Favorites
- *   description: Operations with user's favorites
- */
-
-/**
- * @swagger
- * /api/favorites/add:
+ * /favorite:
  *   post:
- *     summary: Add a book to favorites
- *     tags: [Favorites]
+ *     summary: Добавить книгу в избранное
+ *     tags:
+ *       - Favorite
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -26,46 +18,33 @@ const router = Router();
  *           schema:
  *             type: object
  *             properties:
+ *               userId:
+ *                 type: integer
  *               bookId:
  *                 type: integer
  *             required:
+ *               - userId
  *               - bookId
  *     responses:
  *       '200':
- *         description: Book added to favorites successfully
- *       '401':
- *         description: Unauthorized
- *       '400':
- *         description: Bad request
+ *         description: Книга добавлена в избранное успешно
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Book added to favorites successfully
+ *               favoriteBook: { id: 1, userId: 123, bookId: 456, createdAt: "2023-01-01T12:00:00.000Z", updatedAt: "2023-01-01T12:00:00.000Z" }
  *       '500':
- *         description: Internal server error
+ *         description: Внутренняя ошибка сервера
  */
-router.post('/add', checkAuthentication, favoriteController.addToFavorites);
+router.post("/", favoriteController.addToFavorites);
 
 /**
  * @swagger
- * /api/favorites:
- *   get:
- *     summary: Get user's favorites
- *     tags: [Favorites]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       '200':
- *         description: A list of user's favorite books
- *       '401':
- *         description: Unauthorized
- *       '500':
- *         description: Internal server error
- */
-router.get('/', checkAuthentication, favoriteController.getFavorites);
-
-/**
- * @swagger
- * /api/favorites/remove:
+ * /favorite:
  *   delete:
- *     summary: Remove a book from favorites
- *     tags: [Favorites]
+ *     summary: Удалить книгу из избранного
+ *     tags:
+ *       - Favorite
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -75,20 +54,50 @@ router.get('/', checkAuthentication, favoriteController.getFavorites);
  *           schema:
  *             type: object
  *             properties:
+ *               userId:
+ *                 type: integer
  *               bookId:
  *                 type: integer
  *             required:
+ *               - userId
  *               - bookId
  *     responses:
  *       '200':
- *         description: Book removed from favorites successfully
- *       '401':
- *         description: Unauthorized
- *       '404':
- *         description: Book not found in favorites
+ *         description: Книга удалена из избранного успешно
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Book removed from favorites successfully
  *       '500':
- *         description: Internal server error
+ *         description: Внутренняя ошибка сервера
  */
-router.delete('/remove', checkAuthentication, favoriteController.removeFromFavorites);
+router.delete("/", favoriteController.removeFromFavorites);
+
+/**
+ * @swagger
+ * /favorite/{userId}:
+ *   get:
+ *     summary: Получить список избранных книг для пользователя
+ *     tags:
+ *       - Favorite
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Список избранных книг для пользователя
+ *         content:
+ *           application/json:
+ *             example:
+ *               favorites: [{ id: 1, userId: 123, bookId: 456, createdAt: "2023-01-01T12:00:00.000Z", updatedAt: "2023-01-01T12:00:00.000Z", Book: { id: 456, name: "Book Name" } }]
+ *       '500':
+ *         description: Внутренняя ошибка сервера
+ */
+router.get("/:userId", favoriteController.getFavoritesByUser);
 
 module.exports = router;
