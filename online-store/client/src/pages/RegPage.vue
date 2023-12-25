@@ -69,8 +69,6 @@ export default {
         }
 
         function validateEmail1() {
-            // Ваша логика проверки email здесь
-            // Верните сообщение об ошибке или null, если валидация успешна
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
                 return "Email address is not valid";
             }
@@ -78,8 +76,6 @@ export default {
         }
 
         function validatePassword1() {
-            // Ваша логика проверки пароля здесь
-            // Верните сообщение об ошибке или null, если валидация успешна
             if (password.value.length < 8) {
                 return "String should have at least 8 characters";
             }
