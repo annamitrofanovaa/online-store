@@ -24,13 +24,12 @@ const User = sequelize.define("user", {
     console.log('Пользователь создан успешно.');
 });*/
 
-const Basket = sequelize.define("basket", {
+const FavoriteBook = sequelize.define('favorite_book', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  userId: { type: DataTypes.INTEGER, allowNull: false },
+  bookId: { type: DataTypes.INTEGER, allowNull: false },
 });
 
-const BasketBook = sequelize.define("basket_book", {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-});
 
 const Book = sequelize.define("book", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -50,11 +49,6 @@ const Genre = sequelize.define("genre", {
   name: { type: DataTypes.STRING, unique: true, allowNull: false },
 });
 
-/*const Rating = sequelize.define('rating', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    rate: {type: DataTypes.INTEGER, allowNull: false},
-})*/
-
 const BookInfo = sequelize.define("book_info", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   title: { type: DataTypes.STRING, allowNull: false },
@@ -65,14 +59,9 @@ const AuthorGenre = sequelize.define("author_genre", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
-User.hasOne(Basket);
-Basket.belongsTo(User);
-
-//User.hasMany(Rating)
-//Rating.belongsTo(User)
-
-Basket.hasMany(BasketBook);
-BasketBook.belongsTo(Basket);
+// Определение отношения многие ко многим между User и Book через FavoriteBook
+User.belongsToMany(Book, { through: FavoriteBook });
+Book.belongsToMany(User, { through: FavoriteBook });
 
 Author.hasMany(Book);
 Book.belongsTo(Author);
@@ -80,11 +69,8 @@ Book.belongsTo(Author);
 Genre.hasMany(Book);
 Book.belongsTo(Genre);
 
-//Book.hasMany(Rating)
-//Rating.belongsTo(Book)
-
-Book.hasMany(BasketBook);
-BasketBook.belongsTo(Book);
+Book.hasMany(FavoriteBook);
+FavoriteBook.belongsTo(Book);
 
 Book.hasMany(BookInfo, { as: "info" });
 BookInfo.belongsTo(Book);
@@ -94,12 +80,10 @@ Genre.belongsToMany(Author, { through: AuthorGenre });
 
 module.exports = {
   User,
-  Basket,
-  BasketBook,
+  FavoriteBook,
   Book,
   Author,
   Genre,
-  // Rating,
   AuthorGenre,
   BookInfo,
 };
