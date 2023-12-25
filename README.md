@@ -120,188 +120,97 @@ Bookworm
   - Авторизация будет производиться с помощью jwt token
 <details><summary> <h3>Методы API<h3></summary>
 <p>
-openapi: 3.0.0
-info:
-  title: Ваш API
-  version: 1.0.0
-  description: Документация API с использованием Swagger JSDoc
-apis:
-  - "./routes/*.js"
-paths:
-  /api/admin/assignRole:
-    post:
-      summary: Назначить роль пользователю
-      tags:
-        - Admin
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: string
-                role:
-                  type: string
-              required:
-                - userId
-                - role
-      responses:
-        200:
-          description: Роль успешно назначена
-        401:
-          description: Неавторизован
-        500:
-          description: Внутренняя ошибка сервера
-  /api/author:
-    post:
-      summary: Создать нового автора
-      tags:
-        - Authors
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                biography:
-                  type: string
-              required:
-                - name
-      responses:
-        201:
-          description: Автор успешно создан
-        401:
-          description: Неавторизован
-        500:
-          description: Внутренняя ошибка сервера
-    get:
-      summary: Получить список всех авторов
-      tags:
-        - Authors
-      responses:
-        200:
-          description: Список авторов
-        500:
-          description: Внутренняя ошибка сервера
-  /api/book:
-    post:
-      summary: Создать новую книгу
-      tags:
-        - Books
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                price:
-                  type: number
-                genreId:
-                  type: string
-                authorId:
-                  type: string
-                info:
-                  type: string
-                img:
-                  type: string
-                  format: binary
-              required:
-                - name
-                - price
-                - genreId
-                - authorId
-                - img
-      responses:
-        200:
-          description: Книга успешно создана
-        400:
-          description: Некорректный запрос
-        401:
-          description: Неавторизован
-        500:
-          description: Внутренняя ошибка сервера
-    get:
-      summary: Получить список всех книг
-      tags:
-        - Books
-      parameters:
-        - in: query
-          name: genreId
-          schema:
-            type: string
-        - in: query
-          name: authorId
-          schema:
-            type: string
-        - in: query
-          name: limit
-          schema:
-            type: integer
-        - in: query
-          name: page
-          schema:
-            type: integer
-      responses:
-        200:
-          description: Список книг
-        500:
-          description: Внутренняя ошибка сервера
-  /api/book/{id}:
-    get:
-      summary: Получить книгу по ID
-      tags:
-        - Books
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: ID книги
-          schema:
-            type: string
-      responses:
-        200:
-          description: Одна книга
-        404:
-          description: Книга не найдена
-    delete:
-      summary: Удалить книгу по ID
-      tags:
-        - Books
-      security:
-        - bearerAuth: []
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: ID книги
-          schema:
-            type: string
-      responses:
-        200:
-          description: Книга успешно удалена
-        401:
-          description: Неавторизован
-        404:
-          description: Книга не найдена
-        500:
-          description: Внутренняя ошибка сервера
-    put:
-      summary: Редактировать книгу по ID
+    
+* Документация API с использованием Swagger JSDoc
+* подробная информация в файле server/swagger.json или по адресу http://localhost:5000/api-docs/#/
 
+1) Admin - Admin operations
+- POST
+- /api/admin/assignRole
+- Assign a role to a user
+
+2) Authors - Author management
+* POST
+- /api/author
+- Create a new author
+
+* GET
+- /api/author
+- Get all authors
+
+3) Books - Book management
+
+
+
+POST
+/api/book
+Create a new book
+
+Jump to definition
+
+GET
+/api/book
+Get all books
+Jump to definition
+
+GET
+/api/book/{id}
+Get a book by ID
+Jump to definition
+
+DELETE
+/api/book/{id}
+Delete a book by ID
+
+Jump to definition
+
+PUT
+/api/book/{id}
+Edit a book by ID
+
+Jump to definition
+Genres
+Genre management
+
+
+
+POST
+/api/genre
+Create a new genre
+
+Jump to definition
+
+GET
+/api/genre
+Get all genres
+Jump to definition
+Root
+Root endpoint
+
+
+
+GET
+/
+Get information about the API
+Jump to definition
+Users
+User management
+
+
+
+POST
+/api/user/registration
+Register a new user
+Jump to definition
+
+POST
+/api/user/login
+Login to the system
+Jump to definition
+
+GET
+/api/user/auth
+Check if the user is authenticated
 </p></details>
 
 
