@@ -1,8 +1,7 @@
-const { Router } = require('express');
+const express = require('express');
+const router = express.Router();
 const favoriteController = require('../controllers/favoriteController');
-const checkAuthentication = require('../middleware/checkAuthenticationMiddleware');
-
-const router = Router();
+//const checkAuthentication = require('../middleware/checkAuthenticationMiddleware');
 
 /**
  * @swagger
@@ -40,7 +39,7 @@ const router = Router();
  *       '500':
  *         description: Internal server error
  */
-router.post('/add', checkAuthentication, favoriteController.addToFavorites);
+router.post('/add',  favoriteController.addToFavorites);
 
 /**
  * @swagger
@@ -58,7 +57,7 @@ router.post('/add', checkAuthentication, favoriteController.addToFavorites);
  *       '500':
  *         description: Internal server error
  */
-router.get('/', checkAuthentication, favoriteController.getFavorites);
+router.get('/list', favoriteController.getFavoritesByUser);
 
 /**
  * @swagger
@@ -89,6 +88,6 @@ router.get('/', checkAuthentication, favoriteController.getFavorites);
  *       '500':
  *         description: Internal server error
  */
-router.delete('/remove', checkAuthentication, favoriteController.removeFromFavorites);
+router.delete('/remove/:bookId', favoriteController.removeFromFavorites);
 
 module.exports = router;

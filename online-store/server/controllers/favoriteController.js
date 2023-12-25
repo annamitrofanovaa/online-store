@@ -1,72 +1,43 @@
-const { FavoriteBook } = require('../models/models');
-const checkAuthenticationMiddleware = require('../middleware/checkAuthenticationMiddleware');
-
+const ApiError = require("../error/ApiError");
+const { FavoriteBook, Book } = require("../models/models");
 
 class FavoriteController {
-  async addToFavorites(req, res) {
+  async addToFavorites(req, res, next) {
+    const { userId, bookId } = req.body;
+
     try {
-      const userId = req.user.id;
-      const { bookId } = req.body;
-
-      const existingFavorite = await FavoriteBook.findOne({
-        where: { userId, bookId },
-      });
-
-      if (existingFavorite) {
-        return res.status(400).json({ message: 'Book is already in favorites.' });
-      }
-
-      const newFavorite = await FavoriteBook.create({ userId, bookId });
-
-      return res.json({ message: 'Book added to favorites successfully', favorite: newFavorite });
+      const favoriteBook = await FavoriteBook.create({ userId, bookId });
+      return res.json({ message: "Book added to favorites successfully", favoriteBook });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Internal server error.' });
+      return next(ApiError.internal("Unable to add book to favorites"));
     }
   }
 
-  async getFavorites(req, res) {
-    try {
-      const userId = req.user.id;
+  async removeFromFavorites(req, res, next) {
+    const { userId, bookId } = req.body;
 
+    try {
+      await FavoriteBook.destroy({ where: { userId, bookId } });
+      return res.json({ message: "Book removed from favorites successfully" });
+    } catch (error) {
+      return next(ApiError.internal("Unable to remove book from favorites"));
+    }
+  }
+
+  async getFavoritesByUser(req, res, next) {
+    const { userId } = req.params;
+
+    try {
       const favorites = await FavoriteBook.findAll({
         where: { userId },
+        include: [{ model: Book, attributes: ["id", "name"] }],
       });
 
       return res.json({ favorites });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Internal server error.' });
-    }
-  }
-
-  async removeFromFavorites(req, res) {
-    try {
-      const userId = req.user.id;
-      const { bookId } = req.body;
-
-      const favorite = await FavoriteBook.findOne({
-        where: { userId, bookId },
-      });
-
-      if (!favorite) {
-        return res.status(404).json({ message: 'Book not found in favorites.' });
-      }
-
-      await favorite.destroy();
-
-      return res.json({ message: 'Book removed from favorites successfully' });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Internal server error.' });
+      return next(ApiError.internal("Unable to get user favorites"));
     }
   }
 }
-
-// Применяем middleware к методам, которые требуют аутентификации
-FavoriteController.prototype.addToFavorites = checkAuthenticationMiddleware(FavoriteController.prototype.addToFavorites);
-FavoriteController.prototype.getFavorites = checkAuthenticationMiddleware(FavoriteController.prototype.getFavorites);
-FavoriteController.prototype.removeFromFavorites = checkAuthenticationMiddleware(FavoriteController.prototype.removeFromFavorites);
-
 
 module.exports = new FavoriteController();
