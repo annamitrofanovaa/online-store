@@ -171,7 +171,7 @@ export default {
                 label: 'Жанр',
                 field: 'genreId',
                 format: (val, row) => {
-                    console.log(val)
+                    // console.log(val)
                     if (optionsGenre.value.length === 0 || !val) {
                         return null;
                     }
