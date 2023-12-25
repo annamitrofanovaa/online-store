@@ -125,92 +125,31 @@ Bookworm
 * подробная информация в файле server/swagger.json или по адресу http://localhost:5000/api-docs/#/
 
 1) Admin - Admin operations
-- POST
-- /api/admin/assignRole
-- Assign a role to a user
+- POST, /api/admin/assignRole, Assign a role to a user
 
 2) Authors - Author management
-* POST
-- /api/author
-- Create a new author
+- POST, /api/author, Create a new author
 
-* GET
-- /api/author
-- Get all authors
+- GET, /api/author, Get all authors
 
 3) Books - Book management
+- POST, /api/book, Create a new book
+- GET, /api/book, Get all books
+- GET, /api/book/{id}, Get a book by ID
+- DELETE, /api/book/{id}, Delete a book by ID
+- PUT, /api/book/{id}, Edit a book by ID
 
+4) Genres - Genre management
+- POST, /api/genre, Create a new genre
+- GET, /api/genre, Get all genres
 
+5) Root - Root endpoint
+- GET / Get information about the API
 
-POST
-/api/book
-Create a new book
-
-Jump to definition
-
-GET
-/api/book
-Get all books
-Jump to definition
-
-GET
-/api/book/{id}
-Get a book by ID
-Jump to definition
-
-DELETE
-/api/book/{id}
-Delete a book by ID
-
-Jump to definition
-
-PUT
-/api/book/{id}
-Edit a book by ID
-
-Jump to definition
-Genres
-Genre management
-
-
-
-POST
-/api/genre
-Create a new genre
-
-Jump to definition
-
-GET
-/api/genre
-Get all genres
-Jump to definition
-Root
-Root endpoint
-
-
-
-GET
-/
-Get information about the API
-Jump to definition
-Users
-User management
-
-
-
-POST
-/api/user/registration
-Register a new user
-Jump to definition
-
-POST
-/api/user/login
-Login to the system
-Jump to definition
-
-GET
-/api/user/auth
-Check if the user is authenticated
+6) Users - User management
+- POST, /api/user/registration, Register a new user
+- POST, /api/user/login, Login to the system
+- GET, /api/user/auth, Check if the user is authenticated
 </p></details>
 
 
