@@ -24,7 +24,7 @@ class FavoriteController {
       });
 
       if (row) {
-        await row.destroy(); // deletes the row
+        await row.destroy();
       }
       return res.json({ message: "Book removed from favorites successfully" });
       // await Favorite.destroy({ where: { userId, bookId } });

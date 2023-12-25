@@ -42,5 +42,4 @@ router.use("/book", bookRouter);
 router.use("/admin", adminRouter);
 router.use("/bookinfo", bookinfoRouter);
 
-
 module.exports = router;

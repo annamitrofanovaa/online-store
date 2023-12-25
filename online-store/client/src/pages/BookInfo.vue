@@ -1,15 +1,15 @@
 <template>
     <div>
-        <div v-if="selectRow" class="q-my-md row">
-            <div class="col-12 col-md-5">
-                Выбранная книга: {{ selectRow.name }} &mdash; {{ optionsAuthor.find((a) => a.id ===
-                    selectRow.authorId).name }}
+        <div class="row">
+
+            <div class="col-10">
+
+                <q-table :rows="rows" :columns="columns" row-key="id">
+                </q-table>
             </div>
-            <q-btn style="background-color: #1b2332;" text-color="white" size="md" class="q-ma-sm col-auto"
-                @Click="deleteFromFav">Удалить из избранного</q-btn>
         </div>
-        <q-table :rows="rows" :columns="columns" row-key="id" @row-click="rowSelected">
-        </q-table>
+        <q-btn style="background-color: #1b2332;" text-color="white" size="md" class="q-ma-sm col-auto"
+            :to="{ name: 'main' }">Назад</q-btn>
     </div>
 </template>
 

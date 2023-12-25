@@ -108,8 +108,12 @@
                                     <strong>{{ props.row.name }}</strong>
                                 </q-card-section>
                                 <q-separator />
-                                <q-card-section class="flex flex-center">
-                                    <div>{{ props.row.authorId }} </div>
+                                <q-card-section class="text-center">
+                                    <div>Автор: {{ optionsAuthor.find((a) => props.row.authorId === a.id).name }} </div>
+                                    <div>Жанр: {{ optionsGenre.find((g) => props.row.genreId === g.id).name }} </div>
+                                    <div>Цена: {{ props.row.price }} </div>
+                                    <div>Описание: {{ getDescription(props.row.id) }}
+                                    </div>
                                 </q-card-section>
                             </q-card>
                         </div>
@@ -139,6 +143,7 @@ export default {
         const myDescription = ref('');
         const optionsAuthor = ref([]);
         const optionsGenre = ref([]);
+        const allInfos = ref([]);
         const workData = reactive({ id: '', role: '', author: '', genre: '' })
         const bookData = reactive({ name: '', description: '', price: null });
         const $q = useQuasar();
@@ -278,6 +283,18 @@ export default {
             selectRow.value = row;
         }
 
+        function getAllInfos() {
+            postToServer({ url: 'http://localhost:5000/api/bookinfo', request: 'get' })
+                .then((response) => {
+                    console.log('info', response);
+                    allInfos.value = [...response];
+                })
+                .catch((error) => {
+                    console.error(error);
+                })
+        }
+
+        getAllInfos();
         function addToStore() {
             if (selectRow.value && selectRow.value.id) {
                 postToServer({ url: `http://localhost:5000/api/book/${selectRow.value.id}`, getParams: { id: selectRow.value.id }, request: 'get' })
@@ -433,6 +450,11 @@ export default {
                 dialogOpen.value = true;
             }
         }
+        function getDescription(bookId) {
+            const infos = allInfos.value.find((info) => info.bookId === bookId);
+            // console.log('INFO', info.id)
+            return infos ? infos.description : 'Описание отсутствует';
+        }
         function addToFavourites() {
             if (selectRow.value && selectRow.value.id) {
                 postToServer({
@@ -452,7 +474,8 @@ export default {
             role, columns, rows, isGrid, addAdmin, workData,
             bookData, logout, cancel, addBook, dialogOpen, selectRow,
             rowSelected, addToStore, deleteBook, editBook, addAuthor, addGenre,
-            optionsAuthor, authors, genres, optionsGenre, getTable, showBook, myDescription, edit, addToFavourites
+            optionsAuthor, authors, genres, optionsGenre, getTable, showBook, myDescription, edit, addToFavourites, getDescription,
+            allInfos
         }
     },
 }

@@ -22,7 +22,7 @@ const PORT = process.env.PORT || 5000;
 
 const corsOptions = {
   origin: "*", // Укажите адрес вашего фронтенд-приложения
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
   preflightContinue: false,
   optionsSuccessStatus: 204,
   allowedHeaders: "Content-Type,Authorization",
@@ -35,23 +35,25 @@ app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "static")));
 app.use(fileUpload());
 
-// app.use("/api", router);
+app.use("/api", router);
 
-// // Обработка маршрутов
-const userRouter = require("./routes/userRouter");
-const bookRouter = require("./routes/bookRouter");
-const authorRouter = require("./routes/authorRouter");
-const genreRouter = require("./routes/genreRouter");
-const adminRouter = require("./routes/adminRouter");
-const favoriteRouter = require("./routes/favoriteRouter");
+// // // Обработка маршрутов
+// const userRouter = require("./routes/userRouter");
+// const bookRouter = require("./routes/bookRouter");
+// const authorRouter = require("./routes/authorRouter");
+// const genreRouter = require("./routes/genreRouter");
+// const adminRouter = require("./routes/adminRouter");
+// const favoriteRouter = require("./routes/favoriteRouter");
+// const bookInfoRouter = require("./routes/bookinfoRouter");
 
-// // Использование маршрутов
-app.use("/api/user", userRouter);
-app.use("/api/book", bookRouter);
-app.use("/api/author", authorRouter);
-app.use("/api/genre", genreRouter);
-app.use("/api/admin", adminRouter);
-app.use("/api/favorite", favoriteRouter);
+// // // Использование маршрутов
+// app.use("/api/user", userRouter);
+// app.use("/api/book", bookRouter);
+// app.use("/api/author", authorRouter);
+// app.use("/api/genre", genreRouter);
+// app.use("/api/admin", adminRouter);
+// app.use("/api/favorite", favoriteRouter);
+// app.use("/api/bookinfo", bookInfoRouter);
 
 // Обработка ошибок, последний Middleware
 app.use(errorHandler);

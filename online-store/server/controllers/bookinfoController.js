@@ -5,7 +5,7 @@ class BookInfoController {
   async getAllBookInfo(req, res, next) {
     try {
       const bookInfoList = await BookInfo.findAll({
-        attributes: ["description"],
+        attributes: ["bookId", "description"], // Добавлено "bookId" в атрибуты
       });
       return res.json(bookInfoList);
     } catch (error) {
