@@ -43,7 +43,6 @@ class BookController {
         throw new ApiError.notFound("Книга не найдена.");
       }
 
-      // Удаление книги
       await book.destroy();
 
       return res.json({ message: "Книга успешно удалена." });
@@ -53,34 +52,39 @@ class BookController {
   }
 
   async getAll(req, res) {
-    let { genreId, authorId, limit, page } = req.query;
-    page = page || 1;
-    limit = limit || 9;
-    let offset = page * limit - limit; //считаем отступ для страницы N
-    let books;
-    if (!genreId && !authorId) {
-      books = await Book.findAndCountAll({ limit, offset });
-    }
-    if (genreId && !authorId) {
-      books = await Book.findAndCountAll({ where: { genreId }, limit, offset });
-    }
-    if (!genreId && authorId) {
-      books = await Book.findAndCountAll({
-        where: { authorId },
-        limit,
-        offset,
-      });
-    }
-    if (genreId && authorId) {
-      books = await Book.findAndCountAll({
-        where: { genreId, authorId },
-        limit,
-        offset,
-      });
-    }
-
+    const books = await Book.findAll();
     return res.json(books);
   }
+
+  // async getAll(req, res) {
+  //   let { genreId, authorId, limit, page } = req.query;
+  //   page = page || 1;
+  //   limit = limit || 9;
+  //   let offset = page * limit - limit; //считаем отступ для страницы N
+  //   let books;
+  //   if (!genreId && !authorId) {
+  //     books = await Book.findAndCountAll({ limit, offset });
+  //   }
+  //   if (genreId && !authorId) {
+  //     books = await Book.findAndCountAll({ where: { genreId }, limit, offset });
+  //   }
+  //   if (!genreId && authorId) {
+  //     books = await Book.findAndCountAll({
+  //       where: { authorId },
+  //       limit,
+  //       offset,
+  //     });
+  //   }
+  //   if (genreId && authorId) {
+  //     books = await Book.findAndCountAll({
+  //       where: { genreId, authorId },
+  //       limit,
+  //       offset,
+  //     });
+  //   }
+
+  //   return res.json(books);
+  // }
 
   async editBook(req, res, next) {
     try {

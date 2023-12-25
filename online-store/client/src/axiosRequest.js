@@ -120,7 +120,7 @@ export function postToServer({ url, data, request, getParams }) {
         const code = response.status;
         console.log("OBJECT: ", data);
         console.log("RESPONSE: ", response);
-        if (code > 199 && code < 300) {
+        if (code > 199 && code < 305) {
           console.log("RESULT: ", response.data);
           resolve(response.data);
         } else {

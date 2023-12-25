@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const sequelize = require("./db");
+const router = require("./routes/index");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const errorHandler = require("./middleware/ErrorHandlingMiddleware");
@@ -34,23 +35,26 @@ app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "static")));
 app.use(fileUpload());
 
-// Обработка маршрутов
+// app.use("/api", router);
+
+// // Обработка маршрутов
 const userRouter = require("./routes/userRouter");
 const bookRouter = require("./routes/bookRouter");
 const authorRouter = require("./routes/authorRouter");
 const genreRouter = require("./routes/genreRouter");
 const adminRouter = require("./routes/adminRouter");
+const favoriteRouter = require("./routes/favoriteRouter");
 
-// Использование маршрутов
+// // Использование маршрутов
 app.use("/api/user", userRouter);
 app.use("/api/book", bookRouter);
 app.use("/api/author", authorRouter);
 app.use("/api/genre", genreRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/favorite", favoriteRouter);
 
 // Обработка ошибок, последний Middleware
 app.use(errorHandler);
-
 
 // Подключение Swagger UI
 const swaggerJsdoc = require("swagger-jsdoc");

@@ -1,21 +1,7 @@
 <template>
     <div>
-        <q-card flat>
-            <div class="row">
-                <q-img :src="bookData.image" class="col-4"></q-img>
-                <q-card-section class="col-6">
-                    <div class="text-h4 text-center"> {{ bookData.name }} </div>
-                    <div class="q-my-lg text-h6"> Автор : {{ bookData.author }}</div>
-                    <div class="q-my-lg text-h6"> Жанр : {{ bookData.genre }}</div>
-                    <div class="q-my-lg text-h6"> Цена : {{ bookData.price }}</div>
-                    <div class="q-my-lg text-h6"> Описание : {{ bookData.description }}</div>
-                </q-card-section>
-            </div>
-            <q-card-section>
-                <q-btn style="background-color: #1b2332; bottom:-30vh;" text-color="white"
-                    :to="{ name: 'main' }">Назад</q-btn>
-            </q-card-section>
-        </q-card>
+        <q-table :rows="rows" :columns="columns" row-key="id" :grid="isGrid" @row-click="rowSelected">
+        </q-table>
     </div>
 </template>
 
@@ -24,6 +10,68 @@ import { reactive } from 'vue';
 import { userStore } from '../usage'
 export default {
     setup() {
+        const columns = [
+            {
+                name: 'id',
+                align: 'center',
+                label: 'id',
+                field: 'id',
+                sortable: true,
+            },
+            {
+                name: 'name',
+                label: 'Название',
+                field: 'name',
+                align: 'center',
+                sortable: true,
+            },
+            {
+                name: 'author',
+                label: 'Автор',
+                field: 'authorId',
+                format: (val, row) => {
+                    if (optionsAuthor.value.length === 0 || !val) {
+                        return null;
+                    }
+                    const author = optionsAuthor.value.find((a) => a.id === val)
+                    if (!author) {
+                        return null;
+                    }
+                    return author.name
+                },
+                align: 'center',
+                sortable: true,
+            },
+            {
+                name: 'genre',
+                label: 'Жанр',
+                field: 'genreId',
+                format: (val, row) => {
+                    console.log(val)
+                    if (optionsGenre.value.length === 0 || !val) {
+                        return null;
+                    }
+                    const genre = optionsGenre.value.find((g) => g.id === val)
+                    if (!genre) {
+                        return null;
+                    }
+                    return genre.name
+                },
+                align: 'center',
+                sortable: true,
+            },
+            {
+                name: 'price',
+                label: 'Цена',
+                field: 'price',
+                align: 'center',
+                sortable: true,
+            },
+
+        ]
+
+        const rows = ref([]);
+
         const bookData = reactive(userStore.getState().bookInfo);
 
         console.log(bookData)
