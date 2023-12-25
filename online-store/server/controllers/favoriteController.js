@@ -1,4 +1,6 @@
 const { FavoriteBook } = require('../models/models');
+const checkAuthenticationMiddleware = require('../middleware/checkAuthenticationMiddleware');
+
 
 class FavoriteController {
   async addToFavorites(req, res) {
