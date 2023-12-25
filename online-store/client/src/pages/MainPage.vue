@@ -7,10 +7,10 @@
         </q-header>
 
         <q-dialog v-model="dialogOpen" persistent>
-            <q-card class="q-ma-sm" style="width:50vw; height: 70vh;">
+            <q-card class="q-ma-sm" style="width:50vw; height: 60vh;">
                 <q-card-section>
                     <!-- <q-input filled label="id" class="q-ma-md" v-model="bookData.id" clearable></q-input> -->
-                    <q-input filled label="Название книги" class="q-mx-md q-my-sm col" v-model="bookData.name"
+                    <q-input filled label="Название книги" type="text" class="q-mx-md q-my-sm col" v-model="bookData.name"
                         clearable></q-input>
 
                     <q-select filled v-model="authors" class="q-mx-md q-my-sm col" :options="optionsAuthor"
@@ -40,8 +40,8 @@
         <q-page-container>
             <q-page>
                 <div>
-                    <div class="row">
-                        <q-card v-if="role === 'ADMIN'" class="col-12 col-sm-4" flat>
+                    <div class="row" v-if="role === 'ADMIN'">
+                        <q-card class="col-12 col-sm-4" flat>
                             <q-card-section>
                                 <q-input outlined label="Id пользователя" class="q-my-sm" v-model="workData.id"></q-input>
                                 <q-input outlined label="Новая роль" class="q-my-sm" v-model="workData.role"></q-input>
@@ -66,10 +66,10 @@
                         <q-card-section class="q-mx-auto">
                             <q-btn style="background-color: #1b2332;" text-color="white" size="md" class="q-ma-sm col-auto"
                                 @Click="dialogOpen = true">Добавить книгу</q-btn>
-                            <q-btn style="background-color: #1b2332;" text-color="white" size="md" class="q-ma-sm col-auto"
-                                @click="editBook">Редактировать книгу</q-btn>
-                            <q-btn style="background-color: #1b2332;" text-color="white" size="md" class="q-ma-sm col-auto"
-                                @click="deleteBook">Удалить книгу</q-btn>
+                            <q-btn v-if="role === 'ADMIN'" style="background-color: #1b2332;" text-color="white" size="md"
+                                class="q-ma-sm col-auto" @click="editBook">Редактировать книгу</q-btn>
+                            <q-btn v-if="role === 'ADMIN'" style="background-color: #1b2332;" text-color="white" size="md"
+                                class="q-ma-sm col-auto" @click="deleteBook">Удалить книгу</q-btn>
                         </q-card-section>
                     </q-card>
                 </div>
@@ -263,43 +263,10 @@ export default {
         }
 
         function addBook() {
-            // console.log('ID', genres.value)
-
-            // if (!file.value) {
-            //     throw new Error('Файл не добавлен');
-            // }
-
 
             if (!bookData.name.trim() || !bookData.description.trim() || !bookData.price || !genres.value || !authors.value) {
                 throw new Error('Не все данные введены');
             }
-
-
-
-
-            // const reader = new FileReader();
-            // reader.readAsDataURL(file.value);
-            // reader.onload = () => {
-            //     console.log(reader.result);
-            //     image.value = reader.result;
-            // }
-            // console.log('reader : ', reader);
-            // console.log('image.value : ', image.value);
-
-            // console.log(file.value);
-            // console.log('name', file.value.name);
-            // rows.value.push({ ...bookData });
-            // console.log('rows.value ', rows.value)
-
-            // const formData = new FormData();
-            // formData.append('name', bookData.name);
-            // formData.append('info', bookData.description);
-            // formData.append('price', bookData.price);
-            // formData.append('authorId', authors.value);
-            // formData.append('genreId', genres.value);
-            // formData.append('imgBase64', file.value, file.value.name);
-
-
 
             postToServer({
                 url: 'http://localhost:5000/api/book', data: {
@@ -313,7 +280,6 @@ export default {
                     for (const key in bookData) {
                         bookData[key] = '';
                     }
-                    // file.value = null;
                 })
                 .catch((error) => {
                     console.error(error);

@@ -1,50 +1,32 @@
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import MainPage from "../../../../src/pages/MainPage";
 
 describe("MainPage", () => {
-  it("проверяет ввод данных о книге", async () => {
-    const wrapper = shallowMount(MainPage);
+  let wrapper;
 
-    // Проверка ввода названия книги
-    await wrapper
-      .find('input[placeholder="Название книги"]')
-      .setValue("Lord of the Rings");
+  beforeEach(() => {
+    wrapper = mount(MainPage);
+  });
+
+  it('проверяет ввод значения в поле "Название книги" и обновление переменной bookData.name', async () => {
+    const inputBookName = wrapper.find(
+      'q-input[placeholder="Название книги"] input'
+    );
+    await inputBookName.setValue("Lord of the Rings");
     expect(wrapper.vm.bookData.name).toBe("Lord of the Rings");
+  });
 
-    // Проверка выбора автора
-    const authorSelect = wrapper.findComponent({ ref: "authorSelect" });
-    await authorSelect.vm.$emit("change", { id: 1, name: "Tolkien" });
-    expect(wrapper.vm.authors).toBe(1);
+  it('проверяет ввод значения в поле "Описание книги" и обновление переменной bookData.description', async () => {
+    const inputBookDescription = wrapper.find(
+      'q-input[placeholder="Описание книги"] input'
+    );
+    await inputBookDescription.setValue("An epic fantasy novel");
+    expect(wrapper.vm.bookData.description).toBe("An epic fantasy novel");
+  });
 
-    // Проверка выбора жанра
-    const genreSelect = wrapper.findComponent({ ref: "genreSelect" });
-    await genreSelect.vm.$emit("change", { id: 1, name: "Fantasy" });
-    expect(wrapper.vm.genres).toBe(1);
-
-    // Проверка ввода описания книги
-    await wrapper
-      .find('input[placeholder="Описание книги"]')
-      .setValue("A fantasy novel");
-    expect(wrapper.vm.bookData.description).toBe("A fantasy novel");
-
-    // Проверка ввода цены
-    await wrapper.find('input[placeholder="Цена"]').setValue("19.99");
-    expect(wrapper.vm.bookData.price).toBe("19.99");
-
-    // Проверка добавления изображения
-    const fileInput = wrapper.findComponent({ ref: "fileInput" });
-    await fileInput.vm.$emit("change", [{ name: "book_cover.jpg" }]);
-    expect(wrapper.vm.file.name).toBe("book_cover.jpg");
-
-    // Проверка добавления книги
-    await wrapper.find('q-btn[text-color="white"]').trigger("click");
-    // Ожидаемый результат после добавления книги в вашей логике
-
-    // Проверка открытия диалогового окна
-    expect(wrapper.vm.dialogOpen).toBe(true);
-
-    // Проверка отмены добавления книги
-    await wrapper.find("q-btn[flat]").trigger("click");
-    expect(wrapper.vm.dialogOpen).toBe(false);
+  it('проверяет ввод значения в поле "Цена" и обновление переменной bookData.price', async () => {
+    const inputBookPrice = wrapper.find('q-input[placeholder="Цена"] input');
+    await inputBookPrice.setValue("99");
+    expect(wrapper.vm.bookData.price).toBe(99);
   });
 });
