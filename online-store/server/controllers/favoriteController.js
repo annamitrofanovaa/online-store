@@ -1,12 +1,12 @@
 const ApiError = require("../error/ApiError");
-const { FavoriteBook, Book } = require("../models/models");
+const { Favorite, Book } = require("../models/models");
 
 class FavoriteController {
   async addToFavorites(req, res, next) {
     const { userId, bookId } = req.body;
 
     try {
-      const favoriteBook = await FavoriteBook.create({ userId, bookId });
+      const favoriteBook = await Favorite.create({ userId, bookId });
       return res.json({
         message: "Book added to favorites successfully",
         favoriteBook,
