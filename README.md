@@ -34,24 +34,13 @@ Bookworm
 
 <details> 
   
-<summary> <h4>Busket_items</h4> </summary>
-
-|  Название |  Тип  | Ограничение  |
-| --------: | :---: | :----------- |
-|        id | int64 | not null, >0 |
-| author_id | int64 | >0, not null |
-| backet_id | int64 | >0, not null |
-
-</details>
-
-<details> 
-  
-<summary> <h4>Busket</h4> </summary>
+<summary> <h4>Favorite</h4> </summary>
 
 | Название |  Тип  | Ограничение  |
 | -------: | :---: | :----------- |
 |       id | int64 | not null, >0 |
 |  user_id | int64 | >0, not null |
+|  book_id | int64 | >0, not null |
 
 </details>
 
@@ -72,12 +61,13 @@ Bookworm
   
 <summary> <h4>Book_info</h4> </summary>
 
-| Название |     Тип     | Ограничение       |
-| -------: | :---------: | :---------------- |
-|       id |    int64    | not null, >0      |
-|  book_id |    int64    | >0, not null      |
-|    title |   string    | len > 0, not null |
-|    email | description | len > 0, not null |
+| Название  |     Тип     | Ограничение       |
+| -------:  | :---------: | :---------------- |
+|       id  |    int64    | not null, >0      |
+|  book_id  |    int64    | >0, not null      |
+|   price   |  float      | >=0, not null     |
+|    title  |   string    | len > 0, not null |
+|description|    string   | len > 0, not null |
 
 </details>
 
@@ -103,14 +93,11 @@ Bookworm
 
 </details>
 
-## Для каждого элемента данных - ограничения
-
-## Общие ограничения целостности
 
 # Пользовательские роли
 
-Админ - добавить, редактировать <br>
-Пользователь - просмотр, добавление в корзину
+Админ - добавить, редактировать, назначить роль <br>
+Пользователь - просмотр, добавление в избранное
 
 ## Для каждой роли - наименование, ответственность, количество пользователей в этой роли?
 
