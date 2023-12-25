@@ -2,6 +2,7 @@ const ApiError = require("../error/ApiError");
 const { FavoriteBook, Book } = require("../models/models");
 
 class FavoriteController {
+ 
   async addToFavorites(req, res, next) {
     const { userId, bookId } = req.body;
 
