@@ -101,7 +101,19 @@
                 </div>
                 <q-toggle v-model="isGrid" color="green" label="Внешний вид"></q-toggle>
                 <q-table :rows="rows" :columns="columns" row-key="id" :grid="isGrid" @row-click="rowSelected">
-
+                    <template v-slot:item="props">
+                        <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
+                            <q-card flat bordered>
+                                <q-card-section class="text-center">
+                                    <strong>{{ props.row.name }}</strong>
+                                </q-card-section>
+                                <q-separator />
+                                <q-card-section class="flex flex-center">
+                                    <div>{{ props.row.authorId }} </div>
+                                </q-card-section>
+                            </q-card>
+                        </div>
+                    </template>
                 </q-table>
             </q-page>
         </q-page-container>
@@ -214,8 +226,8 @@ export default {
             postToServer({ url: 'http://localhost:5000/api/genre', request: 'get' })
                 .then((response) => {
                     console.log(response);
-                    userStore.updateState('genreInfo', response);
-                    optionsGenre.value = [...userStore.getState().genreInfo];
+                    // userStore.updateState('genreInfo', response);
+                    optionsGenre.value = [...response];
                 })
                 .catch((error) => {
                     console.error(error);
@@ -227,8 +239,8 @@ export default {
             postToServer({ url: 'http://localhost:5000/api/author', request: 'get' })
                 .then((response) => {
                     console.log(response);
-                    userStore.updateState('authorInfo', response);
-                    optionsAuthor.value = [...userStore.getState().authorInfo];
+                    // userStore.updateState('authorInfo', response);
+                    optionsAuthor.value = [...response];
 
                 })
                 .catch((error) => {
@@ -241,9 +253,9 @@ export default {
         getAuthor();
 
 
-        optionsAuthor.value = [...userStore.getState().authorInfo];
+        // optionsAuthor.value = [...authorInfo];
         // console.log(optionsAuthor.value)
-        optionsGenre.value = [...userStore.getState().genreInfo];
+        // optionsGenre.value = [...userStore.getState().genreInfo];
         function addAdmin() {
             if (userStore.getState().access_token) {
                 postToServer({ url: 'http://localhost:5000/api/admin/assignRole', data: { userId: workData.id, newRole: workData.role }, request: 'post' })
@@ -424,7 +436,7 @@ export default {
         function addToFavourites() {
             if (selectRow.value && selectRow.value.id) {
                 postToServer({
-                    url: 'http://localhost:5000/api/favorite/add', data: { bookId: selectRow.value.id, userId: userStore.getState().id },
+                    url: 'http://localhost:5000/api/favorite', data: { bookId: selectRow.value.id, userId: userStore.getState().id },
                     request: 'post'
                 })
                     .then((response) => {

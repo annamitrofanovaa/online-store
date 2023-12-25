@@ -1,12 +1,12 @@
 const ApiError = require("../error/ApiError");
-const { FavoriteBook, Book } = require("../models/models");
+const { Favorite, Book } = require("../models/models");
 
 class FavoriteController {
   async addToFavorites(req, res, next) {
     const { userId, bookId } = req.body;
 
     try {
-      const favoriteBook = await FavoriteBook.create({ userId, bookId });
+      const favoriteBook = await Favorite.create({ userId, bookId });
       return res.json({
         message: "Book added to favorites successfully",
         favoriteBook,
@@ -17,13 +17,19 @@ class FavoriteController {
   }
 
   async removeFromFavorites(req, res, next) {
-    const { userId, bookId } = req.body;
-
     try {
-      await FavoriteBook.destroy({ where: { userId, bookId } });
+      const { userId, bookId } = req.params;
+      const row = await Favorite.findOne({
+        where: { userId, bookId },
+      });
+
+      if (row) {
+        await row.destroy(); // deletes the row
+      }
       return res.json({ message: "Book removed from favorites successfully" });
+      // await Favorite.destroy({ where: { userId, bookId } });
     } catch (error) {
-      return next(ApiError.internal("Unable to remove book from favorites"));
+      return next(ApiError.internal(error));
     }
   }
 
@@ -31,14 +37,13 @@ class FavoriteController {
     const { userId } = req.params;
 
     try {
-      const favorites = await FavoriteBook.findAll({
+      const favorites = await Favorite.findAll({
         where: { userId },
-        include: [{ model: Book, attributes: ["id", "name"] }],
       });
 
-      return res.json({ favorites });
+      return res.json(favorites);
     } catch (error) {
-      return next(ApiError.internal("Unable to get user favorites"));
+      return next(ApiError.internal(error));
     }
   }
 }

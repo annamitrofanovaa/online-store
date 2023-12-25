@@ -24,7 +24,7 @@ const User = sequelize.define("user", {
     console.log('Пользователь создан успешно.');
 });*/
 
-const Favorite = sequelize.define('favorite', {
+const Favorite = sequelize.define("favorite", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   userId: { type: DataTypes.INTEGER, allowNull: false },
   bookId: { type: DataTypes.INTEGER, allowNull: false },
@@ -59,8 +59,16 @@ const AuthorGenre = sequelize.define("author_genre", {
 });
 
 // Определение отношения многие ко многим между User и Book через FavoriteBook
-User.belongsToMany(Book, { through: Favorite});
-Book.belongsToMany(User, { through: Favorite });
+User.belongsToMany(Book, {
+  through: Favorite,
+  // sourceKey: "userId",
+  // targetKey: "id",
+});
+Book.belongsToMany(User, {
+  through: Favorite,
+  // sourceKey: "userId",
+  // targetKey: "id",
+});
 
 Author.hasMany(Book);
 Book.belongsTo(Author);
