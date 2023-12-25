@@ -30,6 +30,7 @@ const bookRouter = require("./bookRouter");
 const favoriteRouter = require("./favoriteRouter");
 const userRouter = require("./userRouter");
 const genreRouter = require("./genreRouter");
+const bookinfoRouter = require("./bookinfoRouter");
 const authorRouter = require("./authorRouter");
 const adminRouter = require("./adminRouter");
 
@@ -39,5 +40,7 @@ router.use("/author", authorRouter);
 router.use("/genre", genreRouter);
 router.use("/book", bookRouter);
 router.use("/admin", adminRouter);
+router.use("/bookinfo", bookinfoRouter);
+
 
 module.exports = router;
