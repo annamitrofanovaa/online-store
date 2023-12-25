@@ -81,7 +81,7 @@
                             <q-btn style="background-color: #1b2332;" text-color="white" size="md" class="q-ma-sm col-auto"
                                 @Click="dialogOpen = true">Добавить книгу</q-btn>
                             <q-btn v-if="role === 'ADMIN'" style="background-color: #1b2332;" text-color="white" size="md"
-                                class="q-ma-sm col-auto" @click="addBook">Редактировать книгу</q-btn>
+                                class="q-ma-sm col-auto" @click="editBook">Редактировать книгу</q-btn>
                             <q-btn v-if="role === 'ADMIN'" style="background-color: #1b2332;" text-color="white" size="md"
                                 class="q-ma-sm col-auto" @click="deleteBook">Удалить книгу</q-btn>
                         </q-card-section>
@@ -93,7 +93,7 @@
                         Выбранная книга: {{ selectRow.name }} &mdash; {{ optionsAuthor.find((a) => a.id ===
                             selectRow.authorId).name }}
                     </div>
-                    <q-btn style="background-color: #1b2332;" text-color="white" size="md" class="col-auto"
+                    <q-btn style="background-color: #1b2332;" text-color="white" size="md" class=" q-ma-sm col-auto"
                         @click="addToStore">Показать
                         подробнее</q-btn>
                     <q-btn style="background-color: #1b2332;" text-color="white" size="md" class="q-ma-sm col-auto"
