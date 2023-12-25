@@ -4,6 +4,9 @@ const { FavoriteBook, Book } = require("../models/models");
 class FavoriteController {
   async addToFavorites(req, res, next) {
     const { userId, bookId } = req.body;
+ 
+  async addToFavorites(req, res, next) {
+    const { userId, bookId } = req.body;
 
     try {
       const favoriteBook = await FavoriteBook.create({ userId, bookId });
@@ -11,6 +14,20 @@ class FavoriteController {
         message: "Book added to favorites successfully",
         favoriteBook,
       });
+    } catch (error) {
+      return next(ApiError.internal("Unable to add book to favorites"));
+    }
+  }
+
+  async removeFromFavorites(req, res, next) {
+    const { userId, bookId } = req.body;
+
+    try {
+      await FavoriteBook.destroy({ where: { userId, bookId } });
+      return res.json({ message: "Book removed from favorites successfully" });
+    try {
+      const favoriteBook = await FavoriteBook.create({ userId, bookId });
+      return res.json({ message: "Book added to favorites successfully", favoriteBook });
     } catch (error) {
       return next(ApiError.internal("Unable to add book to favorites"));
     }

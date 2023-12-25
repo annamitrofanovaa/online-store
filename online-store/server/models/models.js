@@ -24,12 +24,11 @@ const User = sequelize.define("user", {
     console.log('Пользователь создан успешно.');
 });*/
 
-const FavoriteBook = sequelize.define('favorite_book', {
+const Favorite = sequelize.define('favorite', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   userId: { type: DataTypes.INTEGER, allowNull: false },
   bookId: { type: DataTypes.INTEGER, allowNull: false },
 });
-
 
 const Book = sequelize.define("book", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -60,17 +59,14 @@ const AuthorGenre = sequelize.define("author_genre", {
 });
 
 // Определение отношения многие ко многим между User и Book через FavoriteBook
-User.belongsToMany(Book, { through: FavoriteBook });
-Book.belongsToMany(User, { through: FavoriteBook });
+User.belongsToMany(Book, { through: Favorite});
+Book.belongsToMany(User, { through: Favorite });
 
 Author.hasMany(Book);
 Book.belongsTo(Author);
 
 Genre.hasMany(Book);
 Book.belongsTo(Genre);
-
-Book.hasMany(FavoriteBook);
-FavoriteBook.belongsTo(Book);
 
 Book.hasMany(BookInfo, { as: "info" });
 BookInfo.belongsTo(Book);
@@ -80,7 +76,7 @@ Genre.belongsToMany(Author, { through: AuthorGenre });
 
 module.exports = {
   User,
-  FavoriteBook,
+  Favorite,
   Book,
   Author,
   Genre,

@@ -1,7 +1,7 @@
 const ApiError = require("../error/ApiError");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { User, Basket } = require("../models/models");
+const { User } = require("../models/models");
 
 const generateJwt = (id, email, role) => {
   return jwt.sign({ id, email, role }, process.env.SECRET_KEY, {
@@ -54,6 +54,9 @@ class UserController {
         }
         res.json(id);*/
   }
+
+
+  
 }
 
 module.exports = new UserController();

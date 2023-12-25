@@ -123,6 +123,7 @@ Bookworm
 <details><summary> <h3>Методы API<h3></summary>
 <p>
 
+
 * Документация API с использованием Swagger JSDoc
 * подробная информация в файле server/swagger.json или по адресу http://localhost:5000/api-docs/#/
 
