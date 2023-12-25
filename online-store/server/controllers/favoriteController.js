@@ -63,4 +63,10 @@ class FavoriteController {
   }
 }
 
+// Применяем middleware к методам, которые требуют аутентификации
+FavoriteController.prototype.addToFavorites = checkAuthenticationMiddleware(FavoriteController.prototype.addToFavorites);
+FavoriteController.prototype.getFavorites = checkAuthenticationMiddleware(FavoriteController.prototype.getFavorites);
+FavoriteController.prototype.removeFromFavorites = checkAuthenticationMiddleware(FavoriteController.prototype.removeFromFavorites);
+
+
 module.exports = new FavoriteController();
