@@ -30,6 +30,20 @@ const Favorite = sequelize.define("favorite", {
   bookId: { type: DataTypes.INTEGER, allowNull: false },
 });
 
+const BookHistory = sequelize.define("book_history", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  bookId: { type: DataTypes.INTEGER, allowNull: false },
+  userId: { type: DataTypes.INTEGER, allowNull: true },
+  description: { type: DataTypes.STRING, allowNull: false },
+});
+
+const Review = sequelize.define("review", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  userId: { type: DataTypes.INTEGER, allowNull: false },
+  bookId: { type: DataTypes.INTEGER, allowNull: false },
+  text: { type: DataTypes.TEXT, allowNull: false },
+});
+
 const Book = sequelize.define("book", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, unique: true, allowNull: false },
@@ -79,6 +93,14 @@ Book.belongsTo(Genre);
 Book.hasMany(BookInfo, { as: "info" });
 BookInfo.belongsTo(Book);
 
+Book.hasMany(BookHistory);
+BookHistory.belongsTo(Book);
+
+User.hasMany(Review);
+Book.hasMany(Review);
+Review.belongsTo(User);
+Review.belongsTo(Book);
+
 Author.belongsToMany(Genre, { through: AuthorGenre });
 Genre.belongsToMany(Author, { through: AuthorGenre });
 
@@ -90,4 +112,6 @@ module.exports = {
   Genre,
   AuthorGenre,
   BookInfo,
+  Review,
+  BookHistory,
 };

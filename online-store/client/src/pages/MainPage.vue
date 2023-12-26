@@ -48,6 +48,18 @@
         </q-dialog>
 
 
+        <q-dialog v-model="review">
+            <div>
+                <q-input filled label="Ваш отзыв" class="q-mx-md q-my-sm col" v-model="bookReview" clearable></q-input>
+                <q-btn class="q-mr-lg" flat @click="addReview">Добавить</q-btn>
+            </div>
+        </q-dialog>
+
+
+        <q-dialog v-model="MOREREVIEW">
+            <q-table :rows="rows1" :columns="columns1" row-key="id">
+            </q-table>
+        </q-dialog>
 
 
 
@@ -97,6 +109,10 @@
                         @click="addToStore">Показать
                         подробнее</q-btn>
                     <q-btn style="background-color: #1b2332;" text-color="white" size="md" class="q-ma-sm col-auto"
+                        @Click="showReview">Добавить отзыв</q-btn>
+                    <q-btn style="background-color: #1b2332;" text-color="white" size="md" class="q-ma-sm col-auto"
+                        @Click="showAllReview">Показать отзывы на книгу</q-btn>
+                    <q-btn style="background-color: #1b2332;" text-color="white" size="md" class="q-ma-sm col-auto"
                         @Click="addToFavourites">Добавить в избранное</q-btn>
                 </div>
                 <q-toggle v-model="isGrid" color="green" label="Внешний вид"></q-toggle>
@@ -135,6 +151,7 @@ export default {
         const isGrid = ref(false);
         const role = userStore.getState().role;
         const dialogOpen = ref(false);
+        const review = ref(false);
         const showBook = ref(false);
         const edit = ref(false);
         const selectRow = ref(null);
@@ -146,7 +163,43 @@ export default {
         const allInfos = ref([]);
         const workData = reactive({ id: '', role: '', author: '', genre: '' })
         const bookData = reactive({ name: '', description: '', price: null });
+        const bookReview = ref('');
+        const MOREREVIEW = ref(false);
+        // const addReview = ref('');
         const $q = useQuasar();
+
+
+        const rows1 = ref([]);
+
+        const columns1 = [
+            {
+                name: 'id',
+                align: 'center',
+                label: 'id',
+                field: 'bookId',
+                // format: (val, row) => {
+                //     console.log(row);
+                //     console.log(val);
+                //     row.id;
+                // },
+                sortable: true,
+            },
+            {
+                name: 'text',
+                align: 'center',
+                label: 'Отзыв',
+                field: 'text',
+                sortable: true,
+            },
+            {
+                name: 'Пользователь',
+                align: 'center',
+                label: 'user',
+                field: 'userId',
+                sortable: true,
+            },
+
+        ]
 
 
 
@@ -470,12 +523,47 @@ export default {
                     })
             }
         }
+
+        function showReview() {
+            if (selectRow.value && selectRow.value.id) {
+                review.value = true;
+            }
+        }
+
+        function addReview() {
+            if (selectRow.value && selectRow.value.id) {
+                postToServer({ url: 'http://localhost:5000/api/review', data: { userId: userStore.getState().id, bookId: selectRow.value.id, text: bookReview.value }, request: 'post' })
+                    .then((response) => {
+                        console.log(response);
+                        review.value = false;
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    })
+            }
+        }
+
+        function showAllReview() {
+            if (selectRow.value && selectRow.value.id) {
+                postToServer({ url: `http://localhost:5000/api/review/${selectRow.value.id}`, request: 'get' })
+                    .then((response) => {
+                        MOREREVIEW.value = true;
+                        console.log(response);
+                        rows1.value = [...response.reviews];
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    })
+            }
+        }
+
+
         return {
             role, columns, rows, isGrid, addAdmin, workData,
             bookData, logout, cancel, addBook, dialogOpen, selectRow,
             rowSelected, addToStore, deleteBook, editBook, addAuthor, addGenre,
             optionsAuthor, authors, genres, optionsGenre, getTable, showBook, myDescription, edit, addToFavourites, getDescription,
-            allInfos
+            allInfos, addReview, review, bookReview, showReview, showAllReview, MOREREVIEW, rows1, columns1
         }
     },
 }

@@ -61,13 +61,13 @@ Bookworm
   
 <summary> <h4>Book_info</h4> </summary>
 
-| Название  |     Тип     | Ограничение       |
-| -------:  | :---------: | :---------------- |
-|       id  |    int64    | not null, >0      |
-|  book_id  |    int64    | >0, not null      |
-|   price   |  float      | >=0, not null     |
-|    title  |   string    | len > 0, not null |
-|description|    string   | len > 0, not null |
+|    Название |  Тип   | Ограничение       |
+| ----------: | :----: | :---------------- |
+|          id | int64  | not null, >0      |
+|     book_id | int64  | >0, not null      |
+|       price | float  | >=0, not null     |
+|       title | string | len > 0, not null |
+| description | string | len > 0, not null |
 
 </details>
 
@@ -93,12 +93,35 @@ Bookworm
 
 </details>
 
+<details> 
+  
+<summary> <h4>Review</h4> </summary>
+
+| Название |  Тип   | Ограничение  |
+| -------: | :----: | :----------- |
+|       id | int64  | not null, >0 |
+|  user_id | int64  | integer      |
+|  book_id | int64  | integer      |
+|     text | STRING | len > 0      |
+
+</details>
+
+<details>
+
+<summary> <h4>Book_history</h4> </summary>
+
+|    Название |  Тип   | Ограничение  |
+| ----------: | :----: | :----------- |
+|          id | int64  | not null, >0 |
+|     book_id | int64  | not null, >0 |
+| description | STRING | len > 0      |
+
+</details>
 
 # Пользовательские роли
 
 Админ - добавить автора\жанр\книгу, редактировать их, назначить роль пользователя <br>
 Пользователь - просмотр, добавление в избранное, просмотр добавленных книг
-
 
 # UI / API
 

@@ -1,6 +1,6 @@
 const uuid = require("uuid");
 const path = require("path");
-const { Book, BookInfo } = require("../models/models");
+const { Book, BookInfo, BookHistory } = require("../models/models");
 const ApiError = require("../error/ApiError");
 
 class BookController {
@@ -89,17 +89,16 @@ class BookController {
   async editBook(req, res, next) {
     try {
       const { id } = req.params;
-
-      // Проверка существования книги
       const book = await Book.findByPk(id);
       if (!book) {
         throw new ApiError.notFound("Книга не найдена.");
       }
 
-      // Получение новых данных для книги из тела запроса
       const { name, price, genreId, authorId } = req.body;
 
-      // Обновление данных книги
+      // Получаем старые данные книги перед обновлением
+      const oldBookData = await Book.findByPk(id);
+
       await book.update({
         name: name || book.name,
         price: price || book.price,
@@ -107,12 +106,17 @@ class BookController {
         authorId: authorId || book.authorId,
       });
 
+      // Создаем запись в истории изменений
+      await BookHistory.create({
+        bookId: id,
+        description: JSON.stringify(oldBookData),
+      });
+
       return res.json(book);
     } catch (e) {
       next(ApiError.badRequest(e.message));
     }
   }
-
   async getOne(req, res) {
     const { id } = req.params;
     const book = await Book.findOne({
