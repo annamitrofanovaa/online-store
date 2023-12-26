@@ -66,7 +66,6 @@ Bookworm
 |          id | int64  | not null, >0      |
 |     book_id | int64  | >0, not null      |
 |       price | float  | >=0, not null     |
-|       title | string | len > 0, not null |
 | description | string | len > 0, not null |
 
 </details>
@@ -97,12 +96,14 @@ Bookworm
   
 <summary> <h4>Review</h4> </summary>
 
-| Название |  Тип   | Ограничение  |
-| -------: | :----: | :----------- |
-|       id | int64  | not null, >0 |
-|  user_id | int64  | integer      |
-|  book_id | int64  | integer      |
-|     text | STRING | len > 0      |
+|  Название |  Тип   | Ограничение  |
+| --------: | :----: | :----------- |
+|        id | int64  | not null, >0 |
+|   user_id | int64  | integer      |
+|   book_id | int64  | integer      |
+|     level | int64  | integer      |
+| parent_id | int64  | integer      |
+|      text | STRING | len > 0      |
 
 </details>
 

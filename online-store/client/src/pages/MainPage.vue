@@ -213,13 +213,13 @@ export default {
                 field: 'text',
                 sortable: true,
             },
-            {
-                name: 'Пользователь',
-                align: 'center',
-                label: 'user',
-                field: 'userId',
-                sortable: true,
-            },
+            // {
+            //     name: 'Пользователь',
+            //     align: 'center',
+            //     label: 'user',
+            //     field: 'userId',
+            //     sortable: true,
+            // },
             {
                 name: 'parentId',
                 align: 'center',
@@ -594,6 +594,7 @@ export default {
                 postToServer({ url: 'http://localhost:5000/api/review', data: requestData, request: 'post' })
                     .then((response) => {
                         console.log(response);
+                        bookReview.value = '';
                         review.value = false;
                     })
                     .catch((error) => {

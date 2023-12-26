@@ -53,6 +53,10 @@ const Book = sequelize.define("book", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, unique: true, allowNull: false },
   price: { type: DataTypes.INTEGER, allowNull: false },
+  // authorId1: { type: DataTypes.INTEGER, allowNull: false },
+  // authorId2: { type: DataTypes.INTEGER, allowNull: true },
+  // genreId1: { type: DataTypes.INTEGER, allowNull: false },
+  // genreId2: { type: DataTypes.INTEGER, allowNull: true },
   // rating: { type: DataTypes.INTEGER, defaultValue: 0 },
   //   img: { type: DataTypes.STRING, allowNull: true },
 });
