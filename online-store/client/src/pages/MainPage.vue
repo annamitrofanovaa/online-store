@@ -14,10 +14,10 @@
                     <q-input filled label="Название книги" type="text" class="q-mx-md q-my-sm col" v-model="bookData.name"
                         clearable></q-input>
 
-                    <q-select filled v-model="authors" class="q-mx-md q-my-sm col" :options="optionsAuthor"
+                    <q-select filled v-model="authors" multiple class="q-mx-md q-my-sm col" :options="optionsAuthor"
                         option-value="id" option-label="name" emit-value map-options label="Автор"></q-select>
-                    <q-select filled v-model="genres" class="q-mx-md q-my-sm col" :options="optionsGenre" option-value="id"
-                        option-label="name" emit-value map-options label="Жанр"></q-select>
+                    <q-select filled v-model="genres" multiple class="q-mx-md q-my-sm col" :options="optionsGenre"
+                        option-value="id" option-label="name" emit-value map-options label="Жанр"></q-select>
 
                     <q-input v-if="!edit" filled label="Описание книги" class="q-mx-md q-my-sm col"
                         v-model="bookData.description" clearable></q-input>
@@ -49,16 +49,28 @@
 
 
         <q-dialog v-model="review">
-            <div>
-                <q-input filled label="Ваш отзыв" class="q-mx-md q-my-sm col" v-model="bookReview" clearable></q-input>
-                <q-btn class="q-mr-lg" flat @click="addReview">Добавить</q-btn>
-            </div>
+            <q-card>
+
+                <div>
+                    <q-input filled label="Ваш отзыв" class="q-mx-md q-my-sm col" v-model="bookReview" clearable></q-input>
+                    <q-btn style="background-color: #1b2332; " text-color="white" class="q-mr-lg" flat
+                        @click="addReview">Добавить</q-btn>
+                </div>
+            </q-card>
         </q-dialog>
 
 
-        <q-dialog v-model="MOREREVIEW">
-            <q-table :rows="rows1" :columns="columns1" row-key="id">
-            </q-table>
+        <q-dialog v-model="MOREREVIEW" width="60vw">
+            <div>
+
+                <q-card v-if="selectRow1">
+                    <q-btn style="background-color: #1b2332; " text-color="white" class="q-mr-lg" flat
+                        @click="answerOn">Ответить</q-btn>
+                </q-card>
+                <q-table :rows="rows1" :columns="columns1" row-key="id" @row-click="onSelection">
+
+                </q-table>
+            </div>
         </q-dialog>
 
 
@@ -69,8 +81,10 @@
                     <div class="row" v-if="role === 'ADMIN'">
                         <q-card class="col-12 col-sm-4" flat>
                             <q-card-section>
-                                <q-input outlined label="Id пользователя" class="q-my-sm" v-model="workData.id"></q-input>
-                                <q-input outlined label="Новая роль" class="q-my-sm" v-model="workData.role"></q-input>
+                                <q-input outlined label="Email пользователя" class="q-my-sm"
+                                    v-model="workData.email"></q-input>
+                                <q-input outlined label="Новая роль (ADMIN)" class="q-my-sm"
+                                    v-model="workData.role"></q-input>
                                 <q-btn style="background-color: #1b2332;" text-color="white" size="md"
                                     @click="addAdmin">Добавить админа</q-btn>
                             </q-card-section>
@@ -155,6 +169,8 @@ export default {
         const showBook = ref(false);
         const edit = ref(false);
         const selectRow = ref(null);
+        const selectRow1 = ref(null);
+
         const authors = ref(null);
         const genres = ref(null);
         const myDescription = ref('');
@@ -167,6 +183,7 @@ export default {
         const MOREREVIEW = ref(false);
         // const addReview = ref('');
         const $q = useQuasar();
+        const answer = ref(false);
 
 
         const rows1 = ref([]);
@@ -175,13 +192,18 @@ export default {
             {
                 name: 'id',
                 align: 'center',
-                label: 'id',
+                label: 'Название книги',
                 field: 'bookId',
-                // format: (val, row) => {
-                //     console.log(row);
-                //     console.log(val);
-                //     row.id;
-                // },
+                format: (val, row) => {
+                    if (allBooks.value.length === 0 || !val) {
+                        return null;
+                    }
+                    const book = allBooks.value.find((b) => b.id === val);
+                    if (!book) {
+                        return null;
+                    }
+                    return book.name;
+                },
                 sortable: true,
             },
             {
@@ -198,20 +220,35 @@ export default {
                 field: 'userId',
                 sortable: true,
             },
-
+            {
+                name: 'parentId',
+                align: 'center',
+                label: 'Отве на отзыв',
+                field: 'parentId',
+                format: (val, row) => {
+                    if (!val) {
+                        return 'Отсутствует родительский отзыв';
+                    }
+                    // Здесь можете преобразовать val в нужный формат, если это id, ищите соответствующий отзыв и получайте информацию о нем
+                    // Например:
+                    const parentReview = rows1.value.find((review) => review.id === val);
+                    return parentReview ? `${parentReview.text}` : 'Не найден';
+                },
+                sortable: true,
+            },
         ]
 
 
 
 
         const columns = [
-            {
-                name: 'id',
-                align: 'center',
-                label: 'id',
-                field: 'id',
-                sortable: true,
-            },
+            // {
+            //     name: 'id',
+            //     align: 'center',
+            //     label: 'id',
+            //     field: 'id',
+            //     sortable: true,
+            // },
             {
                 name: 'name',
                 label: 'Название',
@@ -267,11 +304,14 @@ export default {
         const rows = ref([]);
 
 
+        const allBooks = ref([]);
         function getTable() {
             postToServer({ url: 'http://localhost:5000/api/book', request: 'get' })
                 .then((response) => {
                     console.log(response);
                     rows.value = [...response];
+                    allBooks.value = [...response];
+                    console.log(allBooks.value);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -311,6 +351,8 @@ export default {
         getAuthor();
 
 
+
+
         // optionsAuthor.value = [...authorInfo];
         // console.log(optionsAuthor.value)
         // optionsGenre.value = [...userStore.getState().genreInfo];
@@ -334,6 +376,10 @@ export default {
         function rowSelected(event, row, idx) {
             console.log(row);
             selectRow.value = row;
+        }
+        function onSelection(event, row, idx) {
+            console.log('ON SEKECT', row);
+            selectRow1.value = row;
         }
 
         function getAllInfos() {
@@ -465,6 +511,11 @@ export default {
             dialogOpen.value = false;
         }
 
+        function answerOn() {
+            if (selectRow1.value && selectRow1.value.id) {
+                review.value = true;
+            }
+        }
 
         function deleteBook() {
             if (selectRow.value && selectRow.value.id) {
@@ -532,7 +583,15 @@ export default {
 
         function addReview() {
             if (selectRow.value && selectRow.value.id) {
-                postToServer({ url: 'http://localhost:5000/api/review', data: { userId: userStore.getState().id, bookId: selectRow.value.id, text: bookReview.value }, request: 'post' })
+                console.log('SELECTROW', selectRow.value.id)
+                let requestData = { userId: userStore.getState().id, bookId: selectRow.value.id, text: bookReview.value };
+
+                if (selectRow1.value && selectRow1.value.id) {
+                    console.log('SELECTROW1', selectRow1.value.id);
+                    requestData.parentId = selectRow1.value.id;
+                }
+
+                postToServer({ url: 'http://localhost:5000/api/review', data: requestData, request: 'post' })
                     .then((response) => {
                         console.log(response);
                         review.value = false;
@@ -543,18 +602,23 @@ export default {
             }
         }
 
+
         function showAllReview() {
             if (selectRow.value && selectRow.value.id) {
                 postToServer({ url: `http://localhost:5000/api/review/${selectRow.value.id}`, request: 'get' })
                     .then((response) => {
                         MOREREVIEW.value = true;
                         console.log(response);
-                        rows1.value = [...response.reviews];
+                        rows1.value = [...response];
                     })
                     .catch((error) => {
                         console.error(error);
                     })
             }
+        }
+
+        function replyToReview() {
+
         }
 
 
@@ -563,7 +627,8 @@ export default {
             bookData, logout, cancel, addBook, dialogOpen, selectRow,
             rowSelected, addToStore, deleteBook, editBook, addAuthor, addGenre,
             optionsAuthor, authors, genres, optionsGenre, getTable, showBook, myDescription, edit, addToFavourites, getDescription,
-            allInfos, addReview, review, bookReview, showReview, showAllReview, MOREREVIEW, rows1, columns1
+            allInfos, addReview, review, bookReview, showReview, showAllReview, MOREREVIEW, rows1, columns1, replyToReview, onSelection, selectRow1,
+            answerOn
         }
     },
 }

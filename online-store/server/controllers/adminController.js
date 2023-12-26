@@ -4,7 +4,7 @@ const ApiError = require("../error/ApiError");
 class AdminController {
   async assignRole(req, res, next) {
     try {
-      const { userId, newRole } = req.body;
+      const { email, newRole } = req.body;
       console.log(
         "!!!!!!!!!!!!Идентификатор пользователя для изменения роли:",
         userId
@@ -24,7 +24,7 @@ class AdminController {
       //   );
       // }
 
-      const user = await User.findByPk(userId);
+      const user = await User.findByPk(email);
       if (!user) {
         return next(ApiError.internal("Пользователь не найден."));
       }

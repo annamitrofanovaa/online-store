@@ -37,12 +37,17 @@ const BookHistory = sequelize.define("book_history", {
   description: { type: DataTypes.STRING, allowNull: false },
 });
 
-const Review = sequelize.define("review", {
+const Review = sequelize.define("review_tree", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  text: { type: DataTypes.TEXT, allowNull: false },
   userId: { type: DataTypes.INTEGER, allowNull: false },
   bookId: { type: DataTypes.INTEGER, allowNull: false },
-  text: { type: DataTypes.TEXT, allowNull: false },
+  parentId: { type: DataTypes.INTEGER },
+  level: { type: DataTypes.INTEGER, defaultValue: 0 },
 });
+
+Review.belongsTo(Review, { as: "parent", foreignKey: "parentId" });
+Review.hasMany(Review, { as: "replies", foreignKey: "parentId" });
 
 const Book = sequelize.define("book", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -96,10 +101,10 @@ BookInfo.belongsTo(Book);
 Book.hasMany(BookHistory);
 BookHistory.belongsTo(Book);
 
-User.hasMany(Review);
-Book.hasMany(Review);
-Review.belongsTo(User);
-Review.belongsTo(Book);
+// User.hasMany(Review);
+// Book.hasMany(Review);
+// Review.belongsTo(User);
+// Review.belongsTo(Book);
 
 Author.belongsToMany(Genre, { through: AuthorGenre });
 Genre.belongsToMany(Author, { through: AuthorGenre });

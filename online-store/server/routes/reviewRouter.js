@@ -1,24 +1,20 @@
-// routers/reviewRouter.js
 const Router = require("express");
 const router = new Router();
 const reviewController = require("../controllers/reviewController");
-// const checkRole = require("../middleware/checkRoleMiddleware");
 
 /**
  * @swagger
  * tags:
  *   name: Reviews
- *   description: Book reviews
+ *   description: Reviews management
  */
 
 /**
  * @swagger
  * /reviews:
  *   post:
- *     summary: Add a review for a book
+ *     summary: Add a new review
  *     tags: [Reviews]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -26,27 +22,64 @@ const reviewController = require("../controllers/reviewController");
  *           schema:
  *             type: object
  *             properties:
+ *               text:
+ *                 type: string
  *               userId:
  *                 type: integer
  *               bookId:
  *                 type: integer
- *               text:
- *                 type: string
+ *               parentId:
+ *                 type: integer
  *             required:
+ *               - text
  *               - userId
  *               - bookId
- *               - text
  *     responses:
  *       '200':
- *         description: Review added successfully
- *       '401':
- *         description: Unauthorized
+ *         description: Successfully added review
  *       '500':
- *         description: Internal Server Error
+ *         description: Internal server error
  */
 router.post("/", reviewController.addReview);
+
+/**
+ * @swagger
+ * /reviews/{bookId}:
+ *   get:
+ *     summary: Get reviews by book
+ *     tags: [Reviews]
+ *     parameters:
+ *       - in: path
+ *         name: bookId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Reviews by book
+ *       '500':
+ *         description: Internal server error
+ */
 router.get("/:bookId", reviewController.getReviewsByBook);
 
-// Добавьте другие маршруты, если необходимо
+/**
+ * @swagger
+ * /reviews/{id}:
+ *   delete:
+ *     summary: Delete review by ID
+ *     tags: [Reviews]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Review deleted successfully
+ *       '500':
+ *         description: Internal server error
+ */
+router.delete("/:id", reviewController.deleteReview);
 
 module.exports = router;

@@ -3,27 +3,61 @@ const { Review } = require("../models/models");
 
 class ReviewController {
   async addReview(req, res, next) {
-    const { userId, bookId, text } = req.body;
-
     try {
-      const review = await Review.create({ userId, bookId, text });
-      return res.json({ message: "Review added successfully", review });
+      const { text, userId, bookId, parentId } = req.body;
+
+      const parentReview = await Review.findByPk(parentId);
+
+      const level = parentReview ? parentReview.level + 1 : 0;
+
+      const review = await Review.create({
+        text,
+        userId,
+        bookId,
+        parentId,
+        level,
+      });
+      return res.json(review);
     } catch (error) {
-      return next(ApiError.internal("Unable to add review"));
+      next(ApiError.internal("Unable to add review"));
     }
   }
 
   async getReviewsByBook(req, res, next) {
-    const { bookId } = req.params;
-
     try {
+      const { bookId } = req.params;
+
       const reviews = await Review.findAll({
         where: { bookId },
+        include: [
+          {
+            model: Review,
+            as: "replies",
+            include: [{ model: Review, as: "replies" }],
+          },
+        ],
       });
 
-      return res.json({ reviews });
+      return res.json(reviews);
     } catch (error) {
-      return next(ApiError.internal("Unable to get reviews for the book"));
+      next(ApiError.internal("Unable to get reviews"));
+    }
+  }
+
+  async deleteReview(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const review = await Review.findByPk(id);
+      if (!review) {
+        throw ApiError.notFound("Review not found");
+      }
+
+      await review.destroy();
+
+      return res.json({ message: "Review deleted successfully" });
+    } catch (error) {
+      next(ApiError.internal("Unable to delete review"));
     }
   }
 }
